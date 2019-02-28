@@ -4,28 +4,36 @@ body {
   h1 {
     color: #244751;
   }
+
+  #header {
+    float: right;
+  }
+
+  span.header {
+    font-size: 200%;
+    font-weight: 800;
+    color: rgb(58, 53, 53);
+    background-color: coral;
+    display: block;
+    width: 100%;
+    
+  }
+
+  main.container {
+    background-color: rgb(205, 196, 196);
+    
+    padding-left:2em;
+    padding-right:2em;
+    padding-top:2em;
+    border-top-width: 2em;
+
+
+
+  }
+
+  form#header{
+    
+
+  }
 }
 
-.topnav {
-  overflow: hidden;
-  background-color: #333;
-}
-
-.topnav a {
-  float: left;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 17px;
-}
-
-.topnav a:hover {
-  background-color: #ddd;
-  color: black;
-}
-
-.topnav a.active {
-  background-color: #4CAF50;
-  color: white;
-}

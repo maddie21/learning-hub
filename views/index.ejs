@@ -12,16 +12,41 @@
   </head>
 
   <body>
-
-    <div class="topnav">
-      <a class="active" href="#home">Learning Hub</a>
-      <div class="search-container">
-        <form action="/action_page.php">
-          <input type="text" placeholder="Search.." name="search">
-          <button type="submit"><i class="fa fa-search"></i></button>
+    <header>
+      <nav id="nav-bar">
+        <img class="logo" src="" />
+        <span class="header">Learning Hub</span>
+        <form id="header">
+          <input type="text" placeholder="Search.." name="search" />
+          <input type="submit" value="Submit" />
         </form>
-      </div>
-    </div>
-    
+      </nav>
+    </header>
+
+    <main class="container">
+      <section class="new-post">
+        <h5>Allows learners to save learning resources like tutorials, blogs and videos in a central place that is publicly available to any user.</h5>
+        <div id="display-content">
+          <div class="post1">
+            <img src="">
+            <h3> Theory of Relativity</h3>
+            <p>Content about the post</p>
+          </div>
+          <div class="post1">
+              <img src="">
+              <h3> CSS for Dummies</h3>
+              <p>Content about the post</p>
+          </div>
+          <div class="post1">
+              <img src="">
+              <h3>Space-the final frontier</h3>
+              <p>Content about the post</p>
+          </div>
+          </div>
+
+      </section>
+      <section id="post-container"></section>
+    </main>
+
   </body>
 </html>

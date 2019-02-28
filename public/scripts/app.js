@@ -1,3 +1,4 @@
+
 $(() => {
   $.ajax({
     method: "GET",
@@ -7,4 +8,8 @@ $(() => {
       $("<div>").text(user.name).appendTo($("body"));
     }
   });;
+
+
 });
+
+
