@@ -25,6 +25,12 @@ exports.seed = function(knex, Promise) {
                 description: 'Palo santo keffiyeh tilde', 
                 URL: 'http://www.Twitter.com',
                 create_time:  knex.raw('CURRENT_TIMESTAMP') }),
+
+        knex('posts')
+        .insert({title: 'Post EQ', 
+                description: 'Palo santo keffiyeh tilde', 
+                URL: 'http://www.Twitter.com',
+                create_time:  knex.raw('CURRENT_TIMESTAMP') }),
       ]);
     });
 };
