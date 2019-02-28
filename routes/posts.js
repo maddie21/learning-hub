@@ -27,13 +27,10 @@ module.exports = (knex) => {
 
   // Takes a new post object and add it to the database
   router.post('/', (req, res) => {
-  
+    const {title, description, URL} = req.body
+    
     knex('posts')
-      .insert({
-        title: 'Post K', 
-        description: 'alo santo keffiyeh tilde skateboard butcher street art fashion axe.', 
-        URL: 'www.666.com'
-      })
+      .insert({title,description,URL})
       .then(r => res.redirect('/api/posts'))
       .catch(err => {
         console.log(err)

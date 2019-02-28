@@ -14,5 +14,17 @@ module.exports = (knex) => {
     });
   });
 
+  // Takes a new post object and add it to the database
+  router.post('/', (req, res) => {
+    const {username, password, first_name, last_name} = req.body
+    
+    knex('users')
+      .insert({username, password, first_name, last_name})
+      .then(r => res.redirect('/api/users'))
+      .catch(err => {
+        console.log(err)
+      })
+  })
+
   return router;
 }
