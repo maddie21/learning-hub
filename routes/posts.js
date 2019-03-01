@@ -8,11 +8,9 @@ module.exports = (knex) => {
   const getMetadataById = (postId) => {
     knex.select('*')
       .from('post_metadata')
-      .where('user_id', postId)
-      .then(metadatas => {
-        forEach(metadata => {
-          console.log(metadata)
-        })
+      .where('post_id', postId)
+      .then(metadata => {
+        console.log(metadata)
       })
   }
 
@@ -21,9 +19,6 @@ module.exports = (knex) => {
       .select("*")
       .from("posts")
       .then(posts => {
-        // posts.forEach(post => {
-        //   getMetadataById(post.id)
-        // })
         res.json(posts);
       })
       .catch(err => {
@@ -50,12 +45,14 @@ module.exports = (knex) => {
   // Takes a post id and returns the post record and its metadata
   router.get('/:postId', (req, res) => {
     const {postId} = req.params
-    knex('posts')
-      .select('*')
-      .where('id', postId)
-      .then(post => {
-        res.json(post)
-      })
+    // knex('posts')
+    //   .select('*')
+    //   .where('id', postId)
+    //   .then(post => {
+    //     res.json(post)
+    //   })
+    getMetadataById(post.id)
+
   })
 
   return router;
