@@ -1,3 +1,6 @@
+body{
+  background-color: rgb(138, 138, 181);
+}
 form#header {
   float: right;
   line-height: 20px;
@@ -20,33 +23,37 @@ div.name {
 div.nav-bar {
   top:0;
   display: block;
+}
 
+div.display-content {
+
+  .post {
+    display: inline-block;
+    width: 29%;
+    margin-left: 1.5%;
+    margin-right: 1.5%;
+    background: #f3f3f3;
+    padding: 30px;
+   
+    border-radius: 10px;
+    img {
+      max-width: 100%;
+    }
+  }
 }
 
 
-
-  // span.header {
-  //   font-size: 200%;
-  //   font-weight: 800;
-  //   color: rgb(58, 53, 53);
-  //   background-color: coral;
-  //   display: block;
-  //   width: 100%;
-    
-  // }
-
-  // main.container {
-  //   background-color: rgb(205, 196, 196);
-  //   display: flex;
-  //   flex-flow: column;
-  //   padding-left:2em;
-  //   padding-right:2em;
-  //   padding-top:2em;
-  //   border-top-width: 2em;
+  h5 {
+    padding-left:25px;
+    color: rgb(52, 47, 47);
+  }
 
 
 
-  // }
+
+
+
+
 
 
 
