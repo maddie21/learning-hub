@@ -34,17 +34,27 @@ module.exports = (knex) => {
 
   // Takes a new post object and add it to the database
   router.post('/', (req, res) => {
-    const {title, URL, description} = req.body
+    const {title, URL, description, category_name} = req.body
     const user_id = req.session.userId
-    console.log('user_id', user_id)
+
     knex('posts')
-      .insert({title,description,URL, user_id})
+      .insert({title, description, URL, user_id})
       .then(() => {
-        res.redirect('/api/posts')
-      })
+        // Create a new category (if not already exist)
+        knex('categories')
+          .insert({category_name})
+          .then(() => {
+            res.redirect('/api/posts')
+          })
+        })
       .catch(err => {
         console.log(err)
       })
+    
+    
+
+    // Use the {category_id, post_id, user_id} to insert to post_categories table
+
   })
 
   // Takes a post id and returns the post record and its metadata
