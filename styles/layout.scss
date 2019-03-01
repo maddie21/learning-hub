@@ -44,6 +44,11 @@ main {
   text-align: center;
 }
 
+datalist {
+  display: none;
+  position: fixed;
+}
+
 #post-container {
   margin: 20px;
 }
