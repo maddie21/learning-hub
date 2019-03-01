@@ -5,25 +5,33 @@ const router  = express.Router();
 
 module.exports = (knex) => {
 
-  const samplePost = {
-    'title': 'It’s Time for Digital Products to Start Empowering Us',
-    'description': 'We’re accepting utility in exchange for disempowerment. It’s not a fair trade.',
-    'URL': 'https://medium.com/s/user-friendly/the-future-of-digital-product-design-is-about-human-empowerment-6a025bc330a'
+  const getMetadataById = (postId) => {
+    knex.select('*')
+      .from('post_metadata')
+      .where('user_id', postId)
+      .then(metadatas => {
+        forEach(metadata => {
+          console.log(metadata)
+        })
+      })
   }
 
   router.get("/", (req, res) => {
     knex
       .select("*")
       .from("posts")
-      .then((results) => {
-        res.json(results);
+      .where('id', 1)
+      .then(posts => {
+        // posts.forEach(post => {
+        //   getMetadataById(post.id)
+        // })
+        res.json(posts);
       })
       .catch(err => {
         console.log(err)
       });
 
   });
-
 
   // Takes a new post object and add it to the database
   router.post('/', (req, res) => {
@@ -35,6 +43,17 @@ module.exports = (knex) => {
       })
       .catch(err => {
         console.log(err)
+      })
+  })
+
+  // Takes a post id and returns the post record and its metadata
+  router.get('/:postId', (req, res) => {
+    const {postId} = req.params
+    knex('posts')
+      .select('*')
+      .where('id', postId)
+      .then(post => {
+        res.json(post)
       })
   })
 
