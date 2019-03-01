@@ -1,7 +1,100 @@
-body {
-  background-color: #EEE;
+$primary-font-color: darkgrey;
+$secondary-font-color: lightgrey;
+$alert-color: #e27d60;
 
-  h1 {
-    color: #244751;
-  }
+$primary-background-color: #eee;
+$secondary-background-color: #659DBD;
+$other-background-color: #BC986A;
+
+html {
+  padding: 0;
 }
+
+body{
+  background-color: $other-background-color;
+  font-family: 'Open Sans', sans-serif;
+  padding: 0;
+}
+
+form#header {
+  float: right;
+  line-height: 20px;
+  margin-top: -50px;
+  padding-right: 10px;
+  color: $secondary-font-color;
+  text-align: left;
+}
+
+div.name {
+  background-color: $secondary-background-color;
+  font-size: 300%;
+  font-weight: 600;
+  color: white;
+  padding: 10px 20px;
+  text-align: left;
+  display: block;
+}
+
+div.nav-bar {
+  top:0;
+  display: block;
+}
+
+main {
+  text-align: center;
+}
+
+#post-container {
+  margin: 20px;
+}
+
+.post {
+  display: inline-block;
+  width: 400px;
+  height: 300px;
+  background: $primary-background-color;
+  padding: 30px;
+  border-radius: 10px;
+  margin: 10px;
+  overflow: hidden;
+}
+
+.post:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+  transition: all 0.4s ease;
+}
+
+.post-title {
+  color: firebrick;
+  font-weight: 700;
+  text-align: center;
+  font-size: 2rem;
+}
+
+.post-description {
+  opacity: .9;
+}
+
+.post-url {
+  color: plum;
+}
+
+.upload-form {
+  background: $secondary-background-color;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+  text-align: center;
+  justify-content: center;
+  width: 800px;
+}
+
+.upload-form * {
+  display: block;
+  margin: 10px auto;
+  padding: 20px 10px;
+  border: none;
+  width: 80%;
+}
+
