@@ -1,4 +1,3 @@
-
 $(() => {
   function createPost(post) {
     return $(`<div class="post col" -data-id=$(post.id) >
@@ -6,43 +5,45 @@ $(() => {
       <p class="post-url"><a href=${post.URL}>${post.URL}</a></p>
       <p class="post-description">${post.description}</p>
       <p class="post-author">user ${post.user_id}</p>
-    </div>`)
+    </div>`);
   }
 
   function renderPosts(posts) {
-    $('#post-container').html('')
+    $("#post-container").html("");
 
     posts.forEach(post => {
-      $('#post-container').prepend(createPost(post))
-    })
+      $("#post-container").prepend(createPost(post));
+    });
   }
 
   $.ajax({
     method: "GET",
     url: "/api/users"
-  }).done((users) => {
-    for(user of users) {
-      $("<div>").text(user.name).appendTo($("body"));
+  }).done(users => {
+    for (user of users) {
+      $("<div>")
+        .text(user.name)
+        .appendTo($("body"));
     }
   });
 
-  function loadPosts () {
+  function loadPosts() {
     $.ajax({
       method: "GET",
       url: "/api/posts"
-    }).done((posts) => {
-      renderPosts(posts)
-    })
+    }).done(posts => {
+      renderPosts(posts);
+    });
   }
 
-  $('.upload-form').on('submit', function (event) {
-    event.preventDefault()
-    
-    const inputSerial = $(this).serialize()
-    $.post('/api/posts', inputSerial, () => {
-      loadPosts()
-    })  
-  })
-  loadPosts()
+  $(".upload-form").on("submit", function(event) {
+    event.preventDefault();
 
-})
+    const inputSerial = $(this).serialize();
+    $.post("/api/posts", inputSerial, () => {
+      loadPosts();
+    });
+  });
+  loadPosts();
+});
+
