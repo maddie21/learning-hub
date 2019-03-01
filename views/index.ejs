@@ -26,15 +26,14 @@
       <input type="text" name="title" placeholder="Title">
       <input type="text" name="URL" placeholder="Url of your resource">
       <input type="text" name="description" placeholder="People should read it because...">
-      <div class="dropdown"><button class="dropbtn">Categories</button>
-        <div class="dropdown-content">
-          <a href="#">General Science</a>
-          <a href="#">Database Management</a>
-          <a href="#">Engineering</a>
-          <a href="#">Digital Marketing</a>
-          <a href="#">News</a>
-        </div>
-      </div>
+      <input list="browsers">
+      <datalist id="browsers" name="category">
+        <option value="Internet Explorer">
+        <option value="Firefox">
+        <option value="Chrome">
+        <option value="Opera">
+        <option value="Safari">
+      </datalist> 
       <input type="submit" value="Upload">
       
     </form>
