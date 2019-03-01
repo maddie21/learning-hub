@@ -6,6 +6,7 @@ const PORT        = process.env.PORT || 8080;
 const ENV         = process.env.ENV || "development";
 const express     = require("express");
 const bodyParser  = require("body-parser");
+const cookieSession = require('cookie-session')
 const sass        = require("node-sass-middleware");
 const app         = express();
 
@@ -35,14 +36,41 @@ app.use("/styles", sass({
   outputStyle: 'expanded'
 }));
 app.use(express.static("public"));
+app.use(cookieSession({
+  name: 'session',
+  keys: ['key1', 'key2']
+}))
+
+// Mount authenticaton middleware
+const isAuthenticated = (req, res, next) => {
+  if (req.session.userId) {
+    next()
+  } else {
+    res.send('Please log in')
+  }
+}
 
 // Mount all resource routes
-app.use("/api/users", usersRoutes(knex));
-app.use("/api/posts", postsRoutes(knex))
+app.use("/api/users", isAuthenticated, usersRoutes(knex));
+app.use("/api/posts", isAuthenticated, postsRoutes(knex))
 
 // Home page
 app.get("/", (req, res) => {
   res.render("index");
+});
+
+app.get('/login', (req, res) => {
+  res.send(`<h1>Please login first </h1>
+  <a href="/login/1">Login as User 1</a>
+  <a href="/login/2">Login as User 2</a>
+  <a href="/login/3">Login as User 3</a>
+  <a href="/login/4">Login as User 4</a>
+  `)
+})
+
+app.get("/login/:userId", (req, res) => {
+  req.session.userId = req.params.userId
+  res.redirect('/');
 });
 
 app.listen(PORT, () => {

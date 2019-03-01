@@ -20,7 +20,6 @@ module.exports = (knex) => {
     knex
       .select("*")
       .from("posts")
-      .where('id', 1)
       .then(posts => {
         // posts.forEach(post => {
         //   getMetadataById(post.id)
@@ -36,9 +35,11 @@ module.exports = (knex) => {
   // Takes a new post object and add it to the database
   router.post('/', (req, res) => {
     const {title, URL, description} = req.body
+    const user_id = req.session.userId
+    console.log('user_id', user_id)
     knex('posts')
-      .insert({title,description,URL})
-      .then(r => {
+      .insert({title,description,URL, user_id})
+      .then(() => {
         res.redirect('/api/posts')
       })
       .catch(err => {
