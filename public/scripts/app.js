@@ -37,8 +37,8 @@ $(() => {
 
   $('.upload-form').on('submit', function (event) {
     event.preventDefault()
-    
     const inputSerial = $(this).serialize()
+
     $.post('/api/posts', inputSerial, () => {
       loadPosts()
     })  

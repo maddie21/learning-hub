@@ -26,8 +26,9 @@
       <input type="text" name="title" placeholder="Title">
       <input type="text" name="URL" placeholder="Url of your resource">
       <input type="text" name="description" placeholder="People should read it because...">
-      <input list="browsers">
-      <datalist id="browsers" name="category">
+      <input name="category_name" id="category-input" list="categories" name="categories">
+
+      <datalist id="categories">
         <option value="Internet Explorer">
         <option value="Firefox">
         <option value="Chrome">
@@ -37,8 +38,6 @@
       <input type="submit" value="Upload">
       
     </form>
-
-
     <main>
       <section id="post-container"></section>
     </main>
