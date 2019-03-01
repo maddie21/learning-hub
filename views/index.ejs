@@ -23,11 +23,22 @@
     </header>
 
     <form action="/api/posts" method="POST" class="upload-form">
-      <input type="text" name="title" value="Title">
-      <input type="text" name="URL" placeholder="Url of your resource.">
+      <input type="text" name="title" placeholder="Title">
+      <input type="text" name="URL" placeholder="Url of your resource">
       <input type="text" name="description" placeholder="People should read it because...">
-      <input type="submit" value="upload">
+      <div class="dropdown"><button class="dropbtn">Categories</button>
+        <div class="dropdown-content">
+          <a href="#">General Science</a>
+          <a href="#">Database Management</a>
+          <a href="#">Engineering</a>
+          <a href="#">Digital Marketing</a>
+          <a href="#">News</a>
+        </div>
+      </div>
+      <input type="submit" value="Upload">
+      
     </form>
+
 
     <main>
       <section id="post-container"></section>
