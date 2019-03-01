@@ -43,6 +43,11 @@ $(() => {
       loadPosts()
     })  
   })
-  loadPosts()
 
+  $('#post-resource').on('click', () => {
+    $('.upload-form').slideToggle('ease')
+  })
+
+  loadPosts()
+  $('.upload-form').toggle()
 })
