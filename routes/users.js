@@ -24,7 +24,8 @@ module.exports = (knex) => {
       .catch(err => {
         console.log(err)
       })
-  })
+  });
+
 
   return router;
 }
