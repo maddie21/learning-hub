@@ -21,8 +21,8 @@ exports.up = function(knex, Promise) {
         function createPostTable () {
             return knex.schema.createTable('posts', (table) => {
               table.increments().primary();
-              table.string('title', 20);
-              table.string('description', 800);
+              table.string('title', 30);
+              table.string('description', 1000);
               table.string('URL');
               table.date('create_time');
               table.integer('user_id').references('id').inTable('users');
@@ -49,7 +49,7 @@ exports.up = function(knex, Promise) {
         function createPostMetadataTable () {
             return knex.schema.createTable('post_metadata', (table) => {
               table.increments().primary();
-              table.boolean('like').defaultTo(false);
+              table.integer('like');
               table.integer('rating');
               table.integer('user_id').references('id').inTable('users');
               table.integer('post_id').references('id').inTable('posts');
