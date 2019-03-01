@@ -1,23 +1,38 @@
-body{
-  background-color: rgb(138, 138, 181);
+$primary-font-color: darkgrey;
+$secondary-font-color: lightgrey;
+$alert-color: #e27d60;
+
+$primary-background-color: #eee;
+$secondary-background-color: #659DBD;
+$other-background-color: #BC986A;
+
+html {
+  padding: 0;
 }
+
+body{
+  background-color: $other-background-color;
+  font-family: 'Open Sans', sans-serif;
+  padding: 0;
+}
+
 form#header {
   float: right;
   line-height: 20px;
   margin-top: -50px;
   padding-right: 10px;
+  color: $secondary-font-color;
+  text-align: left;
 }
 
 div.name {
-  background-color: coral;
+  background-color: $secondary-background-color;
   font-size: 300%;
   font-weight: 600;
-  color: rgb(67, 63, 63);
-  padding-top:16px;
-  padding-bottom:16px;
-  text-align: center;
+  color: white;
+  padding: 10px 20px;
+  text-align: left;
   display: block;
-
 }
 
 div.nav-bar {
@@ -25,28 +40,61 @@ div.nav-bar {
   display: block;
 }
 
-  .post {
-    display: inline-block;
-    width: 29%;
-    margin-left: 1.5%;
-    margin-right: 1.5%;
-    background: #f3f3f3;
-    padding: 30px;
-    border-radius: 10px;
-    margin: 10px;
-  }
+main {
+  text-align: center;
+}
 
-  h5 {
-    padding-left:25px;
-    color: rgb(52, 47, 47);
-  }
+#post-container {
+  margin: 20px;
+}
 
+.post {
+  display: inline-block;
+  width: 400px;
+  height: 300px;
+  background: $primary-background-color;
+  padding: 30px;
+  border-radius: 10px;
+  margin: 10px;
+  overflow: hidden;
+}
 
+.post:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+  transition: all 0.4s ease;
+}
 
+.post-title {
+  color: firebrick;
+  font-weight: 700;
+  text-align: center;
+  font-size: 2rem;
+}
 
+.post-description {
+  opacity: .9;
+}
 
+.post-url {
+  color: plum;
+}
 
+.upload-form {
+  background: $secondary-background-color;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+  text-align: center;
+  justify-content: center;
+  width: 800px;
+}
 
-
-
+.upload-form * {
+  display: block;
+  margin: 10px auto;
+  padding: 20px 10px;
+  border: none;
+  width: 80%;
+}
 

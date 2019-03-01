@@ -1,10 +1,10 @@
 
 $(() => {
   function createPost(post) {
-    return $(`<div class="post" >
-      <p>${post.title}</p>
-      <p>${post.description}</p>
-      <p>${post.URL}</p>
+    return $(`<div class="post col" -data-id=$(post.id) >
+      <p class="post-title">${post.title}</p>
+      <p class="post-url"><a href=${post.URL}>${post.URL}</a></p>
+      <p class="post-description">${post.description}</p>
     </div>`)
   }
 
@@ -25,12 +25,23 @@ $(() => {
     }
   });
 
-  $.ajax({
-    method: "GET",
-    url: "/api/posts"
-  }).done((posts) => {
-    console.log(posts)
-    renderPosts(posts)
+  function loadPosts () {
+    $.ajax({
+      method: "GET",
+      url: "/api/posts"
+    }).done((posts) => {
+      renderPosts(posts)
+    })
+  }
+
+  $('.upload-form').on('submit', function (event) {
+    event.preventDefault()
+    
+    const inputSerial = $(this).serialize()
+    $.post('/api/posts', inputSerial, () => {
+      loadPosts()
+    })  
   })
+  loadPosts()
 
 })
