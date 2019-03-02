@@ -32,6 +32,17 @@ module.exports = (knex) => {
 
   });
 
+  // Send posts of in-session user
+  router.get('/mine', (req, res) => {
+    knex('posts')
+      .select('*')
+      .where('user_id', req.session.userId)
+      .then(posts => {
+        console.log(posts)
+        res.json(posts)
+      })
+  })
+
   // Takes a new post object and add it to the database
   router.post('/', (req, res) => {
     const {title, URL, description, category_name} = req.body

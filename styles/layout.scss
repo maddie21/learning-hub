@@ -46,7 +46,7 @@ datalist {
 }
 
 #post-container {
-  margin: 20px;
+  margin: 10px;
 }
 
 .post {
@@ -124,12 +124,12 @@ datalist {
 }
 
 .index-main {
-  margin-left: 400px;
+  margin-left: 350px;
 }
 
 .sidebar {
   height: 100%;
-  width: 400px;
+  width: 350px;
   background: $secondary-background-color;
   position: fixed;
   z-index:1;
@@ -155,8 +155,12 @@ datalist {
   font-size: 1.5rem;
 }
 
-#post-resource:hover {
+.sidebar-menu li:hover {
   cursor: pointer;
-  transform: scale(1.05);
+  text-decoration: underline;
   transition: all 0.4s ease;
+}
+
+.user-post-container * {
+  display: inline-block;
 }

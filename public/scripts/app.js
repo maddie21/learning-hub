@@ -1,7 +1,7 @@
 
 $(() => {
   function createPost(post) {
-    return $(`<div class="post col" -data-id=$(post.id) >
+    return $(`<div class="post" -data-id=$(post.id) >
       <p class="post-title">${post.title}</p>
       <p class="post-url"><a href=${post.URL}>${post.URL}</a></p>
       <p class="post-description">${post.description}</p>
@@ -9,11 +9,13 @@ $(() => {
     </div>`)
   }
 
-  function renderPosts(posts) {
+  function renderPosts(posts, container) {
     $('#post-container').html('')
+    $('#user-post-container').html('')
+
 
     posts.forEach(post => {
-      $('#post-container').prepend(createPost(post))
+      $(container).prepend(createPost(post))
     })
   }
 
@@ -31,7 +33,7 @@ $(() => {
       method: "GET",
       url: "/api/posts"
     }).done((posts) => {
-      renderPosts(posts)
+      renderPosts(posts, '#post-container')
     })
   }
 
@@ -46,6 +48,13 @@ $(() => {
 
   $('#post-resource').on('click', () => {
     $('.upload-form').slideToggle('ease')
+  })
+
+  $('#my-resources').on('click', () => {
+    $.get('/api/posts/mine', (posts) => {
+      renderPosts(posts, '#user-post-container')
+      $('#user-post-container').show()
+    })
   })
 
   loadPosts()
