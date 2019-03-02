@@ -2,17 +2,14 @@
 $(() => {
 
   function createPost(post) {
-<<<<<<< HEAD
-
-    
-    return $(`<div class="post col" -data-id=$(post.id) >
-=======
     return $(`<div class="post" -data-id=$(post.id) >
->>>>>>> a2dfa55173669293bc365f31a8342031ad54c936
       <p class="post-title">${post.title}</p>
+     
+      
       <p class="post-url"><a href=${post.URL}>${post.URL}</a></p>
       <p class="post-description">${post.description}</p>
       <p class="post-author">user ${post.user_id} </p> 
+      
       </div>
     `)
   }
@@ -53,8 +50,6 @@ $(() => {
       loadPosts()
     })  
   })
-<<<<<<< HEAD
-=======
 
   $('#post-resource').on('click', () => {
     $('.upload-form').slideToggle('ease')
@@ -67,7 +62,17 @@ $(() => {
     })
   })
 
->>>>>>> a2dfa55173669293bc365f31a8342031ad54c936
+  $( ".index-main" ).on( "click", ".post", function(event) {
+    console.log( $( this ).html() );
+ 
+    // const sample 
+    // renderPosts([], '#postpage')
+  });
+
+
+
+
+
   loadPosts()
 
 })
