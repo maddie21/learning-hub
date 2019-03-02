@@ -16,9 +16,19 @@ module.exports = (knex) => {
   }
 
   router.get("/", async (req, res) => {
-    const posts = await knex("posts").leftJoin('post_categories', 'posts.id', '=', 'post_categories.post_id')
-    .select('*')
-    res.send(posts)
+
+    try {
+      const posts = await knex('posts')
+      .leftJoin('post_metadata', 'posts.id', '=', 'post_metadata.post_id')
+      .select('posts.id', 'posts.title', 'posts.description',  'posts.URL', 'posts.user_id', 'post_metadata.like')
+      .count('post_metadata.like as like_count')
+      .groupBy('post_metadata.id', 'posts.id')
+      res.send(posts)
+    }
+    catch(error){
+      console.log(error)
+      res.end('Something went wrong')
+    }
   });
 
   // Send posts of in-session user
@@ -35,6 +45,7 @@ module.exports = (knex) => {
   router.post('/', (req, res) => {
     const {title, URL, description, category_name} = req.body
     const user_id = req.session.userId
+
     getCategoryId(category_name, (categories_id) => {
       knex('posts')
         .insert({title, description, URL, user_id})
@@ -63,6 +74,13 @@ module.exports = (knex) => {
       .then(post => {
         res.json(post)
       })
+  })
+
+  // Flips the like that belongs to the post
+  router.post('/:postId/like', (req, res) => {
+    const {postId} = req.params
+    
+
   })
 
   return router;

@@ -7,35 +7,25 @@ $(() => {
       <p class="post-author">user ${post.user_id}</p>
       
       <div class="social-icon-wrapper">
-      <i class="fas fa-heart"></i>
-      <i class="far fa-comment"></i>
-      <i class="fas fa-star-half-alt"></i>
+        <i class="fas fa-heart"></i>
+        <i class="far fa-comment"></i>
+        <i class="fas fa-star-half-alt"></i>
       </div>
 
     </div>`);
   }
 
+  // @params: array of posts to render, and a designated container
   function renderPosts(posts, container) {
     $('#post-container').html('')
     $('#user-post-container').html('')
-
 
     posts.forEach(post => {
       $(container).prepend(createPost(post))
     })
   }
 
-  $.ajax({
-    method: "GET",
-    url: "/api/users"
-  }).done(users => {
-    for (user of users) {
-      $("<div>")
-        .text(user.name)
-        .appendTo($("body"));
-    }
-  });
-
+  // Load all posts and render it
   function loadPosts() {
     $.ajax({
       method: "GET",
@@ -45,8 +35,7 @@ $(() => {
     })
   }
 
-
-
+  // Creating a post upload form
   $('.upload-form').on('submit', function (event) {
     event.preventDefault()
     const inputSerial = $(this).serialize()
@@ -56,27 +45,29 @@ $(() => {
     })  
   })
 
+  // Toggle post form on click
   $('#post-resource').on('click', () => {
     $('.upload-form').slideToggle('ease')
   })
 
+  // Load current user posts
   $('#my-resources').on('click', () => {
     $.get('/api/posts/mine', (posts) => {
       renderPosts(posts, '#user-post-container')
-      $('#user-post-container').show()
     })
   })
 
-  // Loads all posts when click title
+  // Loads all posts when click site title
   $('.page-title').on('click', () => {
     loadPosts()
   })
 
-  // logs user in
+  // logs user1 in
   $('#login-li').on('click', () => {
     $.get('/login/1')
   })
 
+  // Initial load of the page
   loadPosts()
   $('.upload-form').toggle()
 })
