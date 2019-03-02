@@ -45,7 +45,19 @@ $(() => {
     })
   }
 
+  function renderProfileContainer (user) {
+    // create a jquery user profile
+    const $user = $(`<div class="users" data-id=${user.id}>
+    <p class="user-id">User ID:${user.id}</p>
+    <p class="user-firstname">First name: ${user.first_name}</p>
+    <p class="user-lastname">Last name: ${user.last_name}</p>
+    </div>`);
 
+    // append the user to container
+    $('.profile-container').append($user)
+       
+
+  }
 
   $('.upload-form').on('submit', function (event) {
     event.preventDefault()
@@ -60,11 +72,30 @@ $(() => {
     $('.upload-form').slideToggle('ease')
   })
 
+    // Rendering user profile and resources
   $('#my-resources').on('click', () => {
+    // right screen
     $.get('/api/posts/mine', (posts) => {
       renderPosts(posts, '#user-post-container')
       $('#user-post-container').show()
     })
+
+    // left screen 
+    // $.get('/api/users', (users) => {
+    //   renderProfileContainer(user)
+    //   $('#profile-container').show()
+    // })
+
+    const user = {
+      id: 1,
+      first_name: 'xuenan',
+      last_name: 'maddie'
+    }
+    
+    renderProfileContainer(user)
+    $('#profile-container').show()
+
+
   })
 
   // Loads all posts when click title
@@ -75,8 +106,10 @@ $(() => {
   // logs user in
   $('#login-li').on('click', () => {
     $.get('/login/1')
-  })
+  })  
 
+
+  // Initial load of page
   loadPosts()
   $('.upload-form').toggle()
 })

@@ -1,16 +1,21 @@
 <div class="sidebar">
   <h1 class="page-title">LearningHub</h1>
+  <input type="text" placeholder="Search..">
+  <button class="button">Submit</button>
+  
   <ul class="sidebar-menu">
-    <li id="login-li">login</li>
-    <li id="post-resource">post</li>
-    <li id="my-resources">my resources</li>
+    <li id="login-li">Login</li>
+    
+    <li id="post-resource">Post</li>
+    <li id="my-resources">My Resources</li>
   </ul>
   <form action="/api/posts" method="POST" class="upload-form">
     <input type="textarea" name="title" placeholder="Title">
     <input type="text" name="URL" placeholder="Url of your resource">
     <textarea name="description" id="" placeholder="People should read it because..." cols="30" rows="10"></textarea>
     <input name="category_name" id="category-input" list="categories" name="categories" placeholder="category">
-
+    
+      
     <datalist id="categories">
       <option value="Design">
       <option value="Sports">
@@ -21,4 +26,17 @@
     <input class="post-button" type="submit" value="Upload">
     
   </form>
-</div>
+  <div class="profile-container">
+      <label for="user.id">User ID:</label>
+      <input type="text" id="user.id" name="user.id" placeholder="Your User ID">
+      <br>
+      <label for="first_name">First Name:</label>
+      <input type="text" id="first_name" name="first_name" placeholder="Your First Name"><br>
+      <br>
+      <label for="last_name">Last Name:</label>
+      <input type="text" id="last_name" name="last_name" placeholder="Your Last Name"><br>
+      <button class="button">Update</button>
+  </div>
+  </div>
+
+  
