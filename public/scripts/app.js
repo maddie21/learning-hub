@@ -7,35 +7,25 @@ $(() => {
       <p class="post-author">user ${post.user_id}</p>
       
       <div class="social-icon-wrapper">
-      <i class="fas fa-heart"></i>
-      <i class="far fa-comment"></i>
-      <i class="fas fa-star-half-alt"></i>
+        <i class="fas fa-heart"></i>
+        <i class="far fa-comment"></i>
+        <i class="fas fa-star-half-alt"></i>
       </div>
 
     </div>`);
   }
 
+  // @params: array of posts to render, and a designated container
   function renderPosts(posts, container) {
     $('#post-container').html('')
     $('#user-post-container').html('')
-
 
     posts.forEach(post => {
       $(container).prepend(createPost(post))
     })
   }
 
-  $.ajax({
-    method: "GET",
-    url: "/api/users"
-  }).done(users => {
-    for (user of users) {
-      $("<div>")
-        .text(user.name)
-        .appendTo($("body"));
-    }
-  });
-
+  // Load all posts and render it
   function loadPosts() {
     $.ajax({
       method: "GET",
@@ -55,7 +45,7 @@ $(() => {
 
     // append the user to container
     $('.profile-container').append($user)
-       
+  
 
   }
 
@@ -68,16 +58,16 @@ $(() => {
     })  
   })
 
+  // Toggle post form on click
   $('#post-resource').on('click', () => {
     $('.upload-form').slideToggle('ease')
   })
 
-    // Rendering user profile and resources
+  // Load current user posts
   $('#my-resources').on('click', () => {
     // right screen
     $.get('/api/posts/mine', (posts) => {
       renderPosts(posts, '#user-post-container')
-      $('#user-post-container').show()
     })
 
     // left screen 
@@ -98,18 +88,25 @@ $(() => {
 
   })
 
-  // Loads all posts when click title
+  // Loads all posts when click site title
   $('.page-title').on('click', () => {
     loadPosts()
   })
 
-  // logs user in
+  // logs user1 in
   $('#login-li').on('click', () => {
     $.get('/login/1')
   })  
 
 
-  // Initial load of page
+  $('#post-container').on('click', '.fa-heart', function() {
+    const post_id = $(this).closest('.post').data('id')
+    $.post(`/api/posts/${post_id}/like`, () => {
+      // renderPost(post_id)
+    })
+  })
+
+  // Initial load of the page
   loadPosts()
   $('.upload-form').toggle()
 })
