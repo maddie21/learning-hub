@@ -3,17 +3,20 @@ $secondary-font-color: lightgrey;
 $alert-color: #e27d60;
 
 $primary-background-color: #eee;
+$secondary-background-color: #659dbd;
+$other-background-color: rgb(138, 134, 131);
+
 $secondary-background-color: #659DBD;
 $other-background-color: #eee;
+
 
 html {
   padding: 0;
 }
 
-body{
-  background-color: $secondary-font-color;
-  font-family: 'Open Sans', sans-serif;
-  padding: 0;
+body {
+  background-color: $other-background-color;
+  font-family: "Open Sans", sans-serif;
 }
 
 form#header {
@@ -36,7 +39,7 @@ div.name {
 }
 
 div.nav-bar {
-  top:0;
+  top: 0;
   display: block;
 }
 
@@ -49,7 +52,7 @@ datalist {
   display: inline-block;
   width: 300px;
   height: 300px;
-  background: $primary-background-color;
+  background: white;
   padding: 30px;
   border-radius: 10px;
   margin: 25px;
@@ -78,7 +81,7 @@ datalist {
 }
 
 .post-description {
-  opacity: .9;
+  opacity: 0.9;
 }
 
 .post-url {
@@ -93,6 +96,7 @@ datalist {
   position: absolute;
   top: 0;
   right: 20px;
+  
 }
 
 .upload-form {
@@ -165,3 +169,23 @@ datalist {
 .user-post-container * {
   display: inline-block;
 }
+
+.social-icon-wrapper {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left:0;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  color: rgb(31, 194, 132);
+  border-top: 2px solid rgb(109, 100, 100);
+  padding-top: 10px;
+}
+
+.social-icon-wrapper:hover{
+  cursor: pointer;
+  filter: brightness(90%);
+  color: rgb(213, 136, 70);
+  
+}
+

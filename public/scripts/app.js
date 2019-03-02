@@ -1,4 +1,3 @@
-
 $(() => {
   function createPost(post) {
     return $(`<div class="post" data-id=${post.id}>
@@ -6,7 +5,14 @@ $(() => {
       <p class="post-url"><a href=${post.URL}>${post.URL}</a></p>
       <p class="post-description">${post.description}</p>
       <p class="post-author">user ${post.user_id}</p>
-    </div>`)
+      
+      <div class="social-icon-wrapper">
+      <i class="fas fa-heart"></i>
+      <i class="far fa-comment"></i>
+      <i class="fas fa-star-half-alt"></i>
+      </div>
+
+    </div>`);
   }
 
   function renderPosts(posts, container) {
@@ -22,13 +28,15 @@ $(() => {
   $.ajax({
     method: "GET",
     url: "/api/users"
-  }).done((users) => {
-    for(user of users) {
-      $("<div>").text(user.name).appendTo($("body"));
+  }).done(users => {
+    for (user of users) {
+      $("<div>")
+        .text(user.name)
+        .appendTo($("body"));
     }
   });
 
-  function loadPosts () {
+  function loadPosts() {
     $.ajax({
       method: "GET",
       url: "/api/posts"
@@ -36,6 +44,8 @@ $(() => {
       renderPosts(posts, '#post-container')
     })
   }
+
+
 
   $('.upload-form').on('submit', function (event) {
     event.preventDefault()
@@ -70,3 +80,4 @@ $(() => {
   loadPosts()
   $('.upload-form').toggle()
 })
+
