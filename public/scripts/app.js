@@ -57,6 +57,16 @@ $(() => {
     })
   })
 
+  // Loads all posts when click title
+  $('.page-title').on('click', () => {
+    loadPosts()
+  })
+
+  // logs user in
+  $('#login-li').on('click', () => {
+    $.get('/login/1')
+  })
+
   loadPosts()
   $('.upload-form').toggle()
 })

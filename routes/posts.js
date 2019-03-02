@@ -5,17 +5,6 @@ const router  = express.Router();
 
 module.exports = (knex) => {
 
-  const getMetadataById = (postId) => {
-    knex.select('*')
-      .from('post_metadata')
-      .where('user_id', postId)
-      .then(metadatas => {
-        forEach(metadata => {
-          console.log(metadata)
-        })
-      })
-  }
-
   const getCategoryId = (category_name, cb) => {
     knex('categories')
       .select('id')
@@ -27,7 +16,7 @@ module.exports = (knex) => {
   }
 
   router.get("/", async (req, res) => {
-    const posts = await knex("posts").join('post_categories', 'posts.id', '=', 'post_categories.post_id')
+    const posts = await knex("posts").leftJoin('post_categories', 'posts.id', '=', 'post_categories.post_id')
     .select('*')
     res.send(posts)
   });
