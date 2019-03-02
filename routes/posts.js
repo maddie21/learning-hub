@@ -16,6 +16,17 @@ module.exports = (knex) => {
       })
   }
 
+  const getCategoryId = (category_name, cb) => {
+    knex('categories')
+      .select('id')
+      .where('category_name', category_name)
+      .first()
+      .then(row => {
+        console.log('row.id:', row.id)
+        cb(row.id)
+      })
+  }
+
   router.get("/", (req, res) => {
     knex
       .select("*")
@@ -32,28 +43,36 @@ module.exports = (knex) => {
 
   });
 
+  // Send posts of in-session user
+  router.get('/mine', (req, res) => {
+    knex('posts')
+      .select('*')
+      .where('user_id', req.session.userId)
+      .then(posts => {
+        res.json(posts)
+      })
+  })
+
   // Takes a new post object and add it to the database
   router.post('/', (req, res) => {
     const {title, URL, description, category_name} = req.body
     const user_id = req.session.userId
-
-    knex('posts')
-      .insert({title, description, URL, user_id})
-      .then(() => {
-        // Create a new category (if not already exist)
-        knex('categories')
-          .insert({category_name})
-          .then(() => {
-            res.redirect('/api/posts')
-          })
+    getCategoryId(category_name, (categories_id) => {
+      knex('posts')
+        .insert({title, description, URL, user_id})
+        .returning('id')
+        .then((post_id) => {
+          // Use the {category_id, post_id} to insert to post_categories table
+          knex('post_categories')
+            .insert({post_id: Number(post_id), categories_id})
+            .then(() => {
+              res.redirect('/api/posts')
+            })
         })
-      .catch(err => {
-        console.log(err)
-      })
-    
-    
-
-    // Use the {category_id, post_id, user_id} to insert to post_categories table
+        .catch(err => {
+          console.log(err)
+        })
+    })
 
   })
 
