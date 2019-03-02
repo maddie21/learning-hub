@@ -1,6 +1,6 @@
 $(() => {
   function createPost(post) {
-    return $(`<div class="post" -data-id=$(post.id) >
+    return $(`<div class="post" data-id=${post.id}>
       <p class="post-title">${post.title}</p>
       <p class="post-url"><a href=${post.URL}>${post.URL}</a></p>
       <p class="post-description">${post.description}</p>
@@ -65,6 +65,16 @@ $(() => {
       renderPosts(posts, '#user-post-container')
       $('#user-post-container').show()
     })
+  })
+
+  // Loads all posts when click title
+  $('.page-title').on('click', () => {
+    loadPosts()
+  })
+
+  // logs user in
+  $('#login-li').on('click', () => {
+    $.get('/login/1')
   })
 
   loadPosts()

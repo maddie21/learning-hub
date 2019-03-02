@@ -5,42 +5,20 @@ const router  = express.Router();
 
 module.exports = (knex) => {
 
-  const getMetadataById = (postId) => {
-    knex.select('*')
-      .from('post_metadata')
-      .where('user_id', postId)
-      .then(metadatas => {
-        forEach(metadata => {
-          console.log(metadata)
-        })
-      })
-  }
-
   const getCategoryId = (category_name, cb) => {
     knex('categories')
       .select('id')
       .where('category_name', category_name)
       .first()
       .then(row => {
-        console.log('row.id:', row.id)
         cb(row.id)
       })
   }
 
-  router.get("/", (req, res) => {
-    knex
-      .select("*")
-      .from("posts")
-      .then(posts => {
-        // posts.forEach(post => {
-        //   getMetadataById(post.id)
-        // })
-        res.json(posts);
-      })
-      .catch(err => {
-        console.log(err)
-      });
-
+  router.get("/", async (req, res) => {
+    const posts = await knex("posts").leftJoin('post_categories', 'posts.id', '=', 'post_categories.post_id')
+    .select('*')
+    res.send(posts)
   });
 
   // Send posts of in-session user

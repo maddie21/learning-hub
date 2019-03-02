@@ -48,10 +48,6 @@ datalist {
   position: fixed;
 }
 
-#post-container {
-  margin: 10px;
-}
-
 .post {
   display: inline-block;
   width: 300px;
@@ -65,6 +61,8 @@ datalist {
   -webkit-box-shadow: 10px 10px 55px -19px rgba(0,0,0,0.75);
   -moz-box-shadow: 10px 10px 55px -19px rgba(0,0,0,0.75);
   box-shadow: 10px 10px 55px -19px rgba(0,0,0,0.75);
+  transition: all 0.6s ease;
+  
 }
 
 .post:hover {
@@ -85,6 +83,9 @@ datalist {
 
 .post-description {
   opacity: 0.9;
+  margin-left: 5px;
+
+
 }
 
 .post-url {
@@ -149,6 +150,10 @@ datalist {
   font-size: 3rem;
 }
 
+.page-title:hover {
+  cursor: pointer;
+}
+
 .sidebar-menu {
   list-style: none;
   padding-left: 3px;
@@ -178,7 +183,7 @@ datalist {
   padding-left: 10px;
   color: rgb(31, 194, 132);
   border-top: 2px solid rgb(109, 100, 100);
-  padding-top: 10px;
+  padding-top: 7px;
 }
 
 .social-icon-wrapper:hover{
