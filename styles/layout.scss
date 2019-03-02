@@ -4,14 +4,14 @@ $alert-color: #e27d60;
 
 $primary-background-color: #eee;
 $secondary-background-color: #659DBD;
-$other-background-color: rgb(138, 134, 131);
+$other-background-color: #eee;
 
 html {
   padding: 0;
 }
 
 body{
-  background-color: $other-background-color;
+  background-color: $secondary-font-color;
   font-family: 'Open Sans', sans-serif;
   padding: 0;
 }
@@ -56,14 +56,20 @@ datalist {
   background: $primary-background-color;
   padding: 30px;
   border-radius: 10px;
-  margin: 10px;
+  margin: 25px;
   overflow: hidden;
   position: relative;
+  -webkit-box-shadow: 10px 10px 55px -19px rgba(0,0,0,0.75);
+  -moz-box-shadow: 10px 10px 55px -19px rgba(0,0,0,0.75);
+  box-shadow: 10px 10px 55px -19px rgba(0,0,0,0.75);
 }
 
 .post:hover {
   cursor: pointer;
   transform: scale(1.05);
+  -webkit-box-shadow: 10px 10px 28px -19px rgba(0,0,0,0.75);
+  -moz-box-shadow: 10px 10px 28px -19px rgba(0,0,0,0.75);
+  box-shadow: 10px 10px 28px -19px rgba(0,0,0,0.75);
   transition: all 0.4s ease;
 }
 
@@ -101,7 +107,7 @@ datalist {
 .upload-form * {
   border: none;
   margin: 10px 0;
-  width: 250px;
+  width: 90%;
   padding: 10px;
 }
 
@@ -117,9 +123,13 @@ datalist {
   transition: 0.3s all ease;
 }
 
+.index-main {
+  margin-left: 400px;
+}
+
 .sidebar {
   height: 100%;
-  width: 300px;
+  width: 400px;
   background: $secondary-background-color;
   position: fixed;
   z-index:1;
@@ -130,14 +140,9 @@ datalist {
   color: white;
 }
 
-
-.index-main {
-  margin-left: 300px;
-}
-
 .page-title {
   color: white;
-  font-size: 2rem;
+  font-size: 3rem;
 }
 
 .sidebar-menu {
@@ -146,8 +151,8 @@ datalist {
 }
 
 .sidebar-menu li {
-  line-height: 2rem;
-  font-size: 1.2rem;
+  line-height: 3rem;
+  font-size: 1.5rem;
 }
 
 #post-resource:hover {
