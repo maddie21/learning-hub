@@ -26,57 +26,10 @@ module.exports = (knex) => {
       })
   }
 
-  // returns a post object contains {title, description, url, category_name}
-  const getPostWithMegaData = (post, cb) => {
-    knex('post_categories')
-      .select('categories_id')
-      .where('post_id', 6)
-      .first()
-      .then(row => {
-        knex('categories')
-          .select('category_name')
-          .where('id', row.categories_id)
-          .first()
-          .then(row => {
-            cb(row.category_name)
-          })
-      })
-  }
-
-  router.get("/", (req, res) => {
-    knex
-      .select("*")
-      .from("posts")
-      .then(posts => {
-        // res.send(posts.reduce((postsWithMegaData, post) => {
-          // getPostWithMegaData(post, category_name => {
-          //   [...postsWithMegaData, {...post, category_name}]            
-          // })
-
-        //   [ ...postsWithMegaData, {...post, category_name: 'Technology'} ]    
-        // }, []))
-        // posts.forEach(post => {
-        //   getMetadataById(post.id)
-        // })
-        // res.send(posts);
-        // let postsWithMeta = []
-        
-        // posts.forEach(post => {
-        //   getPostWithMegaData(post, category_name => {
-        //     // console.log('currentPost: ', {...post, category_name})
-        //     postsWithMeta.push({...post, category_name})
-        //   })
-        //   console.log('postsWithMeta: ', postsWithMeta.length)
-        // })
-        // console.log('postsWithMeta: ', postsWithMeta)
-
-
-        res.send(posts)
-      })
-      .catch(err => {
-        console.log(err)
-      });
-
+  router.get("/", async (req, res) => {
+    const posts = await knex("posts").join('post_categories', 'posts.id', '=', 'post_categories.post_id')
+    .select('*')
+    res.send(posts)
   });
 
   // Send posts of in-session user

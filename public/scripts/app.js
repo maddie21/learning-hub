@@ -1,7 +1,7 @@
 
 $(() => {
   function createPost(post) {
-    return $(`<div class="post" -data-id=$(post.id) >
+    return $(`<div class="post" data-id=${post.id}>
       <p class="post-title">${post.title}</p>
       <p class="post-url"><a href=${post.URL}>${post.URL}</a></p>
       <p class="post-description">${post.description}</p>
