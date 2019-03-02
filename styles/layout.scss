@@ -6,6 +6,10 @@ $primary-background-color: #eee;
 $secondary-background-color: #659dbd;
 $other-background-color: rgb(138, 134, 131);
 
+$secondary-background-color: #659DBD;
+$other-background-color: #eee;
+
+
 html {
   padding: 0;
 }
@@ -13,7 +17,6 @@ html {
 body {
   background-color: $other-background-color;
   font-family: "Open Sans", sans-serif;
-  padding: 0;
 }
 
 form#header {
@@ -40,8 +43,9 @@ div.nav-bar {
   display: block;
 }
 
-main {
-  text-align: center;
+datalist {
+  display: none;
+  position: fixed;
 }
 
 #post-container {
@@ -50,19 +54,25 @@ main {
 
 .post {
   display: inline-block;
-  width: 400px;
+  width: 300px;
   height: 300px;
   background: $primary-background-color;
   padding: 30px;
   border-radius: 10px;
-  margin: 10px;
+  margin: 25px;
   overflow: hidden;
   position: relative;
+  -webkit-box-shadow: 10px 10px 55px -19px rgba(0,0,0,0.75);
+  -moz-box-shadow: 10px 10px 55px -19px rgba(0,0,0,0.75);
+  box-shadow: 10px 10px 55px -19px rgba(0,0,0,0.75);
 }
 
 .post:hover {
   cursor: pointer;
   transform: scale(1.05);
+  -webkit-box-shadow: 10px 10px 28px -19px rgba(0,0,0,0.75);
+  -moz-box-shadow: 10px 10px 28px -19px rgba(0,0,0,0.75);
+  box-shadow: 10px 10px 28px -19px rgba(0,0,0,0.75);
   transition: all 0.4s ease;
 }
 
@@ -78,7 +88,10 @@ main {
 }
 
 .post-url {
+  text-align: center;
   color: plum;
+  margin-top: -30px;
+
 }
 
 .post-author {
@@ -90,59 +103,63 @@ main {
 
 .upload-form {
   background: $secondary-background-color;
-  padding: 10px;
-  margin: 10px;
   border-radius: 10px;
   text-align: center;
-  justify-content: center;
-  width: 800px;
 }
 
 .upload-form * {
-  display: block;
+  border: none;
+  margin: 10px 0;
+  width: 90%;
+  padding: 10px;
+}
+
+.post-button {
+  border-radius: 15px;
+  width: 70%;
   margin: 10px auto;
-  padding: 20px 10px;
-  border: none;
-  width: 80%;
 }
 
-.dropbtn {
-  background-color: #4caf50;
+.post-button:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+  transition: 0.3s all ease;
+}
+
+.index-main {
+  margin-left: 400px;
+}
+
+.sidebar {
+  height: 100%;
+  width: 400px;
+  background: $secondary-background-color;
+  position: fixed;
+  z-index:1;
+  top: 0;
+  left: 0;
+  overflow-x:hidden;
+  padding: 20px;
   color: white;
-  padding: 16px;
-  font-size: 16px;
-  border: none;
 }
 
-.dropdown {
-  position: relative;
-  display: inline-block;
+.page-title {
+  color: white;
+  font-size: 3rem;
 }
 
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f1f1f1;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1;
+.sidebar-menu {
+  list-style: none;
+  padding-left: 3px;
 }
 
-.dropdown-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
+.sidebar-menu li {
+  line-height: 3rem;
+  font-size: 1.5rem;
 }
 
-.dropdown-content a:hover {
-  background-color: #ddd;
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-
-.dropdown:hover .dropbtn {
-  background-color: #3e8e41;
+#post-resource:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+  transition: all 0.4s ease;
 }

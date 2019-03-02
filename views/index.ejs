@@ -1,13 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Home Page</title>
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
-      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
-      crossorigin="anonymous"
-    />
+    <title>LearningHub</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
     <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
     <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
@@ -17,38 +12,11 @@
   </head>
 
   <body>
-    <header>
-      <div class="nav-bar">
-        <div class="name">LearningHub</div>
-        <form id="header">
-          <input type="text" placeholder="Search.." name="search" />
-          <input class="upload-button" type="submit" value="Submit" />
-        </form>
-      </div>
-    </header>
-
-    <form action="/api/posts" method="POST" class="upload-form">
-      <input type="text" name="title" placeholder="Title" />
-      <input type="text" name="URL" placeholder="Url of your resource" />
-      <input
-        type="text"
-        name="description"
-        placeholder="People should read it because..."
-      />
-      <input list="browsers" />
-      <datalist id="browsers" name="category">
-        <option value="Internet Explorer"> </option>
-        <option value="Firefox"> </option>
-        <option value="Chrome"> </option>
-        <option value="Opera"> </option>
-        <option value="Safari"> </option>
-      </datalist>
-
-      <input type="submit" value="Upload" />
-    </form>
-
-    <main>
+    <div class="body-wrapper">
+    <%- include _sidebar %>
+    <main class="index-main">
       <section id="post-container"></section>
     </main>
+  </div>
   </body>
 </html>

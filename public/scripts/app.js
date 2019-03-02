@@ -36,14 +36,22 @@ $(() => {
     });
   }
 
-  $(".upload-form").on("submit", function(event) {
-    event.preventDefault();
 
-    const inputSerial = $(this).serialize();
-    $.post("/api/posts", inputSerial, () => {
-      loadPosts();
-    });
-  });
-  loadPosts();
-});
+
+  $('.upload-form').on('submit', function (event) {
+    event.preventDefault()
+    const inputSerial = $(this).serialize()
+
+    $.post('/api/posts', inputSerial, () => {
+      loadPosts()
+    })  
+  })
+
+  $('#post-resource').on('click', () => {
+    $('.upload-form').slideToggle('ease')
+  })
+
+  loadPosts()
+  $('.upload-form').toggle()
+})
 
