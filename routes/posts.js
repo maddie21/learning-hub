@@ -75,11 +75,50 @@ module.exports = (knex) => {
         res.json(post)
       })
   })
+  
+  // Send back all posts that this user liked
+  router.get('/mine/like', (req, res) => {
+    const {userId} = req.params
+
+  })
 
   // Flips the like that belongs to the post
-  router.post('/:postId/like', (req, res) => {
-    const {postId} = req.params
+  router.post('/:postId/like', async (req, res) => {
+    const user_id = req.session.userId
+    const post_id = Number(req.params.postId)
     
+    try {
+
+      // Get the post_metadata based on user and post
+      const user_post_relation = await knex('post_metadata')
+      .select('*')
+      .first()
+      .where('user_id', '=', user_id)
+      .andWhere('post_id', '=', post_id)
+
+      if (user_post_relation) {
+        // If theres is a record, update and flip the like
+        const newLike = user_post_relation === 1 ? 0 : 1
+        await knex('post_metadata')
+        .where('user_id', '=', user_id)
+        .andWhere('post_id', '=', post_id)
+        .update({
+          like: newLike
+        })
+
+      } else {
+        // if no previous relation, insert new record
+        await knex('post_metadata')
+        .insert({
+          like: 1, 
+          rating: 0, 
+          user_id,
+          post_id})
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
 
   })
 

@@ -67,6 +67,13 @@ $(() => {
     $.get('/login/1')
   })
 
+  $('#post-container').on('click', '.fa-heart', function() {
+    const post_id = $(this).closest('.post').data('id')
+    $.post(`/api/posts/${post_id}/like`, () => {
+      // renderPost(post_id)
+    })
+  })
+
   // Initial load of the page
   loadPosts()
   $('.upload-form').toggle()
