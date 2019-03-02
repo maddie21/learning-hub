@@ -45,10 +45,6 @@ datalist {
   position: fixed;
 }
 
-#post-container {
-  margin: 10px;
-}
-
 .post {
   display: inline-block;
   width: 300px;
@@ -144,6 +140,10 @@ datalist {
 .page-title {
   color: white;
   font-size: 3rem;
+}
+
+.page-title:hover {
+  cursor: pointer;
 }
 
 .sidebar-menu {
