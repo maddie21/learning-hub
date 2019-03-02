@@ -99,6 +99,7 @@ datalist {
   position: absolute;
   top: 0;
   right: 20px;
+  
 }
 
 .upload-form {
@@ -167,3 +168,23 @@ datalist {
 .user-post-container * {
   display: inline-block;
 }
+
+.social-icon-wrapper {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left:0;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  color: rgb(31, 194, 132);
+  border-top: 2px solid rgb(109, 100, 100);
+  padding-top: 10px;
+}
+
+.social-icon-wrapper:hover{
+  cursor: pointer;
+  filter: brightness(90%);
+  color: rgb(213, 136, 70);
+  
+}
+

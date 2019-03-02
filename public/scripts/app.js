@@ -5,6 +5,13 @@ $(() => {
       <p class="post-url"><a href=${post.URL}>${post.URL}</a></p>
       <p class="post-description">${post.description}</p>
       <p class="post-author">user ${post.user_id}</p>
+      
+      <div class="social-icon-wrapper">
+      <i class="fas fa-heart"></i>
+      <i class="far fa-comment"></i>
+      <i class="fas fa-star-half-alt"></i>
+      </div>
+
     </div>`);
   }
 
