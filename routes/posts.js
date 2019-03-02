@@ -19,9 +19,10 @@ module.exports = (knex) => {
 
     try {
       const posts = await knex('posts')
-      .leftJoin('post_metadata', 'posts.id', '=', 'post_metadata.post_id')
-      .select('posts.id', 'posts.title', 'posts.description',  'posts.URL', 'posts.user_id', 'post_metadata.like')
+      .join('post_metadata', 'posts.id', '=', 'post_metadata.post_id')
+      .select('posts.id', 'posts.title', 'posts.description',  'posts.URL', 'posts.user_id')
       .count('post_metadata.like as like_count')
+      .distinct('posts.id')
       .groupBy('post_metadata.id', 'posts.id')
       res.send(posts)
     }
@@ -88,7 +89,6 @@ module.exports = (knex) => {
     const post_id = Number(req.params.postId)
     
     try {
-
       // Get the post_metadata based on user and post
       const user_post_relation = await knex('post_metadata')
       .select('*')
@@ -98,7 +98,7 @@ module.exports = (knex) => {
 
       if (user_post_relation) {
         // If theres is a record, update and flip the like
-        const newLike = user_post_relation === 1 ? 0 : 1
+        const newLike = user_post_relation.like === 1 ? 0 : 1
         await knex('post_metadata')
         .where('user_id', '=', user_id)
         .andWhere('post_id', '=', post_id)
