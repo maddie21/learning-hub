@@ -5,7 +5,7 @@ exports.seed = function(knex, Promise) {
     .then(function () {
       return Promise.all([
        // Inserts seed entries
-        knex('post_metadata').insert({like: 0, rating: 3 , user_id: 1, post_id: 2  }),
+        knex('post_metadata').insert({like: 1, rating: 3 , user_id: 1, post_id: 2  }),
         knex('post_metadata').insert({like: 0, rating: 1 , user_id: 2, post_id: 3 }),
         knex('post_metadata').insert({like: 1, rating: 5 , user_id: 5, post_id: 2 }),
         knex('post_metadata').insert({like: 0 , rating: 3 , user_id: 3, post_id: 5 }),

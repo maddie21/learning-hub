@@ -5,42 +5,30 @@ const router  = express.Router();
 
 module.exports = (knex) => {
 
-  const getMetadataById = (postId) => {
-    knex.select('*')
-      .from('post_metadata')
-      .where('user_id', postId)
-      .then(metadatas => {
-        forEach(metadata => {
-          console.log(metadata)
-        })
-      })
-  }
-
   const getCategoryId = (category_name, cb) => {
     knex('categories')
       .select('id')
       .where('category_name', category_name)
       .first()
       .then(row => {
-        console.log('row.id:', row.id)
         cb(row.id)
       })
   }
 
-  router.get("/", (req, res) => {
-    knex
-      .select("*")
-      .from("posts")
-      .then(posts => {
-        // posts.forEach(post => {
-        //   getMetadataById(post.id)
-        // })
-        res.json(posts);
-      })
-      .catch(err => {
-        console.log(err)
-      });
+  router.get("/", async (req, res) => {
 
+    try {
+      const posts = await knex('posts')
+      .leftJoin('post_metadata', 'posts.id', '=', 'post_metadata.post_id')
+      .select('posts.id', 'posts.title', 'posts.description',  'posts.URL', 'posts.user_id', 'post_metadata.like')
+      .count('post_metadata.like as like_count')
+      .groupBy('post_metadata.id', 'posts.id')
+      res.send(posts)
+    }
+    catch(error){
+      console.log(error)
+      res.end('Something went wrong')
+    }
   });
 
   // Send posts of in-session user
@@ -57,6 +45,7 @@ module.exports = (knex) => {
   router.post('/', (req, res) => {
     const {title, URL, description, category_name} = req.body
     const user_id = req.session.userId
+
     getCategoryId(category_name, (categories_id) => {
       knex('posts')
         .insert({title, description, URL, user_id})
@@ -85,6 +74,13 @@ module.exports = (knex) => {
       .then(post => {
         res.json(post)
       })
+  })
+
+  // Flips the like that belongs to the post
+  router.post('/:postId/like', (req, res) => {
+    const {postId} = req.params
+    
+
   })
 
   return router;
