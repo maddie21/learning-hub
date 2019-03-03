@@ -10,9 +10,13 @@ $(() => {
       <p class="post-author">user ${post.user_id}</p>
       
       <div class="social-icon-wrapper">
+     
         <i class="fas fa-heart"></i>
+        <i class ="likes">${post.like_count}</i>
         <i class="far fa-comment"></i>
         <i class="fas fa-star-half-alt"></i>
+        <i class ="ratings">${post.rating_average}</i>
+
       </div>
 
     </div>`);
@@ -43,7 +47,47 @@ $(() => {
     })
   }
 
-  // Creating a post upload form
+  function renderProfileContainer (user) {
+    // create a jquery user profile
+    const $user = $(`<div class="users" data-id=${user.id}>
+    <p class="user-id">User ID:${user.id}</p>
+    <p class="user-firstname">First name: ${user.first_name}</p>
+    <p class="user-lastname">Last name: ${user.last_name}</p>
+    <button class="button-update-profile">Update</button>
+    </div>`);
+
+    // append the user to container
+    $('.profile-container').append($user)
+
+  }
+
+  function renderProfileUpdate () {
+    const $profileUpdateForm = $(`<div class="profile-container" 
+    </br></br><label for="user_name">UserName:</label>
+    <input type="text" id="user-id" name="user_name" placeholder="Your User Name"></br></br>
+    <label for="password">Password: </label>
+    <input type="text" id="password" name="password" placeholder="Your Password"></br></br>
+    <label for="user_firstname">First name: </label>
+    <input type="text" id="first_name" name="first_name" placeholder="Your First Name"></br></br>
+    <label for="user_lastname">Last name: </label>
+    <input type="text" id="last_name" name="last_name" placeholder="Your Last Name"></br></br>
+    
+    <button class="button-update-profile">Update</button>
+    </div>`); 
+    $('.profile-container').append($profileUpdateForm)
+  }
+  // $('.profile-container').on('submit', function (event) {
+  //   event.preventDefault()
+  //   renderProfileUpdate();
+
+  // });
+
+  $('.profile-container').on('click', () => {
+    if($(".profile-container").children().length <=1){
+      renderProfileUpdate();
+    }
+  })
+
   $('.upload-form').on('submit', function (event) {
     event.preventDefault()
     
@@ -68,6 +112,14 @@ $(() => {
         console.log(response.errors)
       }
     })
+
+    $.get('api/users/mine', (user) =>{
+      if($(".profile-container").children().length == 0){
+        renderProfileContainer(user);
+      }
+      
+    })
+
   })
 
   // Loads all posts when click site title
@@ -78,7 +130,8 @@ $(() => {
   // logs user1 in
   $('#login-li').on('click', () => {
     $.get('/login/1')
-  })
+  })  
+
 
   $('#post-container').on('click', '.fa-heart', function() {
     const post_id = $(this).closest('.post').data('id')
@@ -87,8 +140,16 @@ $(() => {
     })
   })
 
+  $('.profile-container').on('click', '.button', function() {
+    //const post_id = $(this).closest('.post').data('id')
+    //$.post(`/api/posts/${post_id}/like`, () => {
+      // renderPost(post_id)
+    })
+  
+
   // Initial load of the page
   loadPosts()
 
 })
+
 

@@ -41,6 +41,12 @@ module.exports = (knex) => {
       })
   })
 
+  router.post('/mine', (req, res) => {
+    const currentUserId = req.session.userId
+    console.log(req.params)
+    return respondSuccess(res)
+  })
+
 
   return router;
 }
