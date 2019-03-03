@@ -26,6 +26,20 @@ module.exports = (knex) => {
       })
   });
 
+  router.get('/mine', (req, res) => {
+    const currentUserId = req.session.userId
+    knex('users')
+      .select('*')
+      .first()
+      .where('id', currentUserId)
+      .then( user => {
+        res.send(user)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  })
+
 
   return router;
 }
