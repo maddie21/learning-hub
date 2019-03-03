@@ -119,7 +119,7 @@ module.exports = (knex) => {
         await knex('post_metadata')
         .insert({
           like: 1, 
-          rating: 0, 
+          rating: null, 
           user_id,
           post_id})
       }
@@ -130,11 +130,30 @@ module.exports = (knex) => {
 
   })
 
+  const respondSuccess = (res, data) => {
+    res.json({
+      status: 'success',
+      data
+    })
+  }
+
+  const respondFailure = (res, errors) => {
+    res.json({
+      status: 'failure',
+      errors
+    })
+  }
+
   router.post('/:postId/rating', async (req, res) => {
+
+    // Check valid parameters 
     const user_id = req.session.userId
+
+    // req.session.userId
     const post_id = Number(req.params.postId)
-    const ratingSubmitted = Number(req.body.rating)
-    
+    const {rating} = req.body
+    console.log('rating', rating)
+
     try {
       // Get the post_metadata based on user and post
       const user_post_relation = await knex('post_metadata')
@@ -145,27 +164,26 @@ module.exports = (knex) => {
 
       if (user_post_relation) {
         // If theres is a record, update to the curent rating
-        const newLike = user_post_relation.like === 1 ? 0 : 1
         await knex('post_metadata')
         .where('user_id', '=', user_id)
         .andWhere('post_id', '=', post_id)
         .update({
-          rating: ratingSubmitted
+          rating: rating
         })
       } else {
         // if no previous relation, insert new record
         await knex('post_metadata')
         .insert({
-          like: 1, 
-          rating: 0, 
+          like: 0, 
+          rating: rating,
           user_id,
           post_id})
       }
 
+      console.log('user_post_relation:', user_post_relation)
     } catch (error) {
       console.log(error)
     }
-
 
   })
 
