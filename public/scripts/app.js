@@ -1,9 +1,13 @@
-$(() => {
+//$(() =>
+$(document).ready(function () {
 
   function createPost(post) {
     return $(`<div class="post" data-id=${post.id}>
+
+    <p><a href="#clickPost" rel="modal:open">Open Modal</a></p>
+ 
       <p class="post-title">${post.title}</p>
-     
+
       
       <p class="post-url"><a href=${post.URL}>${post.URL}</a></p>
       <p class="post-description">${post.description}</p>
@@ -14,6 +18,16 @@ $(() => {
         <i class="far fa-comment"></i>
         <i class="fas fa-star-half-alt"></i>
       </div>
+
+      <div id="clickPost" class="modal">
+      <p class="post-title">${post.title}</p>
+      <p class="post-description">${post.description}</p>
+      <p class="post-author">user ${post.user_id}</p>
+      <a href="#" rel="modal:close">Close</a>
+  </div>
+  
+
+   
 
     </div>`);
   }
@@ -69,6 +83,16 @@ $(() => {
   $('#login-li').on('click', () => {
     $.get('/login/1')
   })
+
+  $( ".index-main" ).on( "click", ".post", function() {
+    console.log( $(this).text() );
+    // alert( $(this).text() );
+
+  });
+
+
+
+
 
   // Initial load of the page
   loadPosts()
