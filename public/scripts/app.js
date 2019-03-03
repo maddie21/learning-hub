@@ -1,7 +1,10 @@
 $(() => {
+
   function createPost(post) {
     return $(`<div class="post" data-id=${post.id}>
       <p class="post-title">${post.title}</p>
+     
+      
       <p class="post-url"><a href=${post.URL}>${post.URL}</a></p>
       <p class="post-description">${post.description}</p>
       <p class="post-author">user ${post.user_id}</p>
@@ -65,8 +68,8 @@ $(() => {
 
   $('.upload-form').on('submit', function (event) {
     event.preventDefault()
+    
     const inputSerial = $(this).serialize()
-
     $.post('/api/posts', inputSerial, () => {
       loadPosts()
     })  
@@ -123,7 +126,7 @@ $(() => {
 
   // Initial load of the page
   loadPosts()
-  $('.upload-form').toggle()
+
 })
 
 
