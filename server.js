@@ -14,6 +14,7 @@ const knexConfig = require("./knexfile");
 const knex = require("knex")(knexConfig[ENV]);
 const morgan = require("morgan");
 const knexLogger = require("knex-logger");
+const {respondFailure, respondSuccess} = require('./utility.js')
 
 // Seperated Routes for each Resource
 const usersRoutes = require("./routes/users");
@@ -51,7 +52,9 @@ const isAuthenticated = (req, res, next) => {
   if (req.session.userId) {
     next();
   } else {
-    res.send("Please log in");
+    return respondFailure(res, [
+      'User must be logged in.'
+    ], 403)
   }
 };
 
