@@ -48,7 +48,7 @@ $(() => {
     <p class="user-id">User ID:${user.id}</p>
     <p class="user-firstname">First name: ${user.first_name}</p>
     <p class="user-lastname">Last name: ${user.last_name}</p>
-    <button class="button-update-profile">Update</button>
+    <button class="button-update-form">Update</button>
     </div>`);
 
     // append the user to container
@@ -71,12 +71,8 @@ $(() => {
     </div>`); 
     $('.profile-container').append($profileUpdateForm)
   }
-  // $('.profile-container').on('submit', function (event) {
-  //   event.preventDefault()
-  //   renderProfileUpdate();
-
-  // });
-
+ 
+// Dispalys update form when "update" from ProfileContainer is clicked
   $('.profile-container').on('click', () => {
     if($(".profile-container").children().length <=1){
       renderProfileUpdate();
@@ -92,6 +88,25 @@ $(() => {
     })  
   })
 
+  // function to update user profile info
+  function updateUser(user) {
+    $.ajax({
+      method: "POST",
+      url: "/api/users/userId"
+    })
+    console.log(user);
+    debugger;
+  }
+  $('.???).on('submit', function (event) {
+    event.preventDefault()
+    
+    const inputSerial = $(this).serialize()
+    $.post('/api/users/userId', inputSerial, () =>{
+      updateUser(inputSerial);
+    })
+    renderProfileUpdate()
+  })
+
   // Toggle post form on click
   $('#post-resource').on('click', () => {
     $('.upload-form').slideToggle('ease')
@@ -105,6 +120,7 @@ $(() => {
     })
 
     $.get('api/users/mine', (user) =>{
+      
       if($(".profile-container").children().length == 0){
         renderProfileContainer(user);
       }
