@@ -84,15 +84,12 @@ $(document).ready(function () {
     $.get('/login/1')
   })
 
-  $( ".index-main" ).on( "click", ".post", function() {
-    console.log( $(this).text() );
-    // alert( $(this).text() );
-
-  });
-
-
-
-
+  $('#post-container').on('click', '.fa-heart', function() {
+    const post_id = $(this).closest('.post').data('id')
+    $.post(`/api/posts/${post_id}/like`, () => {
+      // renderPost(post_id)
+    })
+  })
 
   // Initial load of the page
   loadPosts()

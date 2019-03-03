@@ -20,12 +20,14 @@ module.exports = (knex) => {
     try {
       const posts = await knex('posts')
       .leftJoin('post_metadata', 'posts.id', '=', 'post_metadata.post_id')
-      .select('posts.id', 'posts.title', 'posts.description',  'posts.URL', 'posts.user_id', 'post_metadata.like')
+      .select('posts.id', 'posts.title', 'posts.description',  'posts.URL', 'posts.user_id')
+      .select(knex.raw('ROUND(AVG(post_metadata.rating),1) AS rating_average'))
       .count('post_metadata.like as like_count')
-      .groupBy('post_metadata.id', 'posts.id')
+      .distinct('posts.id')
+      .groupBy('posts.id')
       res.send(posts)
     }
-    catch(error){
+    catch (error) {
       console.log(error)
       res.end('Something went wrong')
     }
@@ -66,20 +68,122 @@ module.exports = (knex) => {
   })
 
   // Takes a post id and returns the post record and its metadata
-  router.get('/:postId', (req, res) => {
+  router.get('/:postId', async (req, res) => {
     const {postId} = req.params
-    knex('posts')
-      .select('*')
-      .where('id', postId)
-      .then(post => {
-        res.json(post)
-      })
+    try {
+      const post = await knex('posts')
+        .leftJoin('post_metadata', 'posts.id', '=', 'post_metadata.post_id')
+        .select('posts.id', 'posts.title', 'posts.description',  'posts.URL', 'posts.user_id')
+        .select(knex.raw('ROUND(AVG(post_metadata.rating),1) as rating_average'))
+        .count('post_metadata.like as like_count')
+        .where('posts.id', postId)
+        .first()
+        .distinct('posts.id')
+        .groupBy('posts.id')
+      res.send(post)
+    } catch (error) {
+      console.log(error)
+    }
+  })
+  
+  // Send back all posts that this user liked
+  router.get('/mine/like', (req, res) => {
+    const {userId} = req.params
+
   })
 
   // Flips the like that belongs to the post
-  router.post('/:postId/like', (req, res) => {
-    const {postId} = req.params
+  router.post('/:postId/like', async (req, res) => {
+    const user_id = req.session.userId
+    const post_id = Number(req.params.postId)
     
+    try {
+      // Get the post_metadata based on user and post
+      const user_post_relation = await knex('post_metadata')
+      .select('like')
+      .first()
+      .where('user_id', '=', user_id)
+      .andWhere('post_id', '=', post_id)
+
+      if (user_post_relation) {
+        // If theres is a record, update and flip the like
+        const newLike = user_post_relation.like === 1 ? 0 : 1
+        await knex('post_metadata')
+        .where('user_id', '=', user_id)
+        .andWhere('post_id', '=', post_id)
+        .update({
+          like: newLike
+        })
+      } else {
+        // if no previous relation, insert new record
+        await knex('post_metadata')
+        .insert({
+          like: 1, 
+          rating: null, 
+          user_id,
+          post_id})
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
+
+  })
+
+  const respondSuccess = (res, data) => {
+    res.json({
+      status: 'success',
+      data
+    })
+  }
+
+  const respondFailure = (res, errors) => {
+    res.json({
+      status: 'failure',
+      errors
+    })
+  }
+
+  router.post('/:postId/rating', async (req, res) => {
+
+    // Check valid parameters 
+    const user_id = req.session.userId
+
+    // req.session.userId
+    const post_id = Number(req.params.postId)
+    const {rating} = req.body
+    console.log('rating', rating)
+
+    try {
+      // Get the post_metadata based on user and post
+      const user_post_relation = await knex('post_metadata')
+      .select('rating')
+      .first()
+      .where('user_id', '=', user_id)
+      .andWhere('post_id', '=', post_id)
+
+      if (user_post_relation) {
+        // If theres is a record, update to the curent rating
+        await knex('post_metadata')
+        .where('user_id', '=', user_id)
+        .andWhere('post_id', '=', post_id)
+        .update({
+          rating: rating
+        })
+      } else {
+        // if no previous relation, insert new record
+        await knex('post_metadata')
+        .insert({
+          like: 0, 
+          rating: rating,
+          user_id,
+          post_id})
+      }
+
+      console.log('user_post_relation:', user_post_relation)
+    } catch (error) {
+      console.log(error)
+    }
 
   })
 
