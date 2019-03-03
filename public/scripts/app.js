@@ -87,16 +87,10 @@ $(() => {
       renderPosts(posts, '#user-post-container')
     })
 
-    const user = {
-      id: 1,
-      first_name: 'xuenan',
-      last_name: 'maddie'
-    }
-    
-    renderProfileContainer(user)
-    $('#profile-container').show()
-
-
+    $.get('api/users/mine', (user) =>{
+      renderProfileContainer(user);
+    })
+  
   })
 
   // Loads all posts when click site title
