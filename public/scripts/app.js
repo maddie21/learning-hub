@@ -10,9 +10,13 @@ $(() => {
       <p class="post-author">user ${post.user_id}</p>
       
       <div class="social-icon-wrapper">
+     
         <i class="fas fa-heart"></i>
+        <i class ="likes">${post.like_count}</i>
         <i class="far fa-comment"></i>
         <i class="fas fa-star-half-alt"></i>
+        <i class ="ratings">${post.rating_average}</i>
+
       </div>
 
     </div>`);
@@ -53,18 +57,31 @@ $(() => {
   }
 
   function renderProfileUpdate () {
-    const $profileUpdateForm = $(`      
-    <label for="user.id">User ID:</label>
-    <input type="text" id="user-id" name="user_id" placeholder="Your User ID">
-    <br>
-    <label for="first_name">First Name:</label>
-    <input type="text" id="first_name" name="first_name" placeholder="Your First Name"><br>
-    <br>
-    <label for="last_name">Last Name:</label>
-    <input type="text" id="last_name" name="last_name" placeholder="Your Last Name"><br>
-    <button class="button">Update</button>
-    `)
+    const $profileUpdateForm = $(`<div class="profile-container" 
+    </br></br><label for="user_name">UserName:</label>
+    <input type="text" id="user-id" name="user_name" placeholder="Your User Name"></br></br>
+    <label for="password">Password: </label>
+    <input type="text" id="password" name="password" placeholder="Your Password"></br></br>
+    <label for="user_firstname">First name: </label>
+    <input type="text" id="first_name" name="first_name" placeholder="Your First Name"></br></br>
+    <label for="user_lastname">Last name: </label>
+    <input type="text" id="last_name" name="last_name" placeholder="Your Last Name"></br></br>
+    
+    <button class="button-update-profile">Update</button>
+    </div>`); 
+    $('.profile-container').append($profileUpdateForm)
   }
+  // $('.profile-container').on('submit', function (event) {
+  //   event.preventDefault()
+  //   renderProfileUpdate();
+
+  // });
+
+  $('.profile-container').on('click', () => {
+    if($(".profile-container").children().length <=1){
+      renderProfileUpdate();
+    }
+  })
 
   $('.upload-form').on('submit', function (event) {
     event.preventDefault()
@@ -88,9 +105,12 @@ $(() => {
     })
 
     $.get('api/users/mine', (user) =>{
-      renderProfileContainer(user);
+      if($(".profile-container").children().length == 0){
+        renderProfileContainer(user);
+      }
+      
     })
-  
+
   })
 
   // Loads all posts when click site title
