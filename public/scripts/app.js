@@ -41,12 +41,26 @@ $(() => {
     <p class="user-id">User ID:${user.id}</p>
     <p class="user-firstname">First name: ${user.first_name}</p>
     <p class="user-lastname">Last name: ${user.last_name}</p>
+    <button class="button-update-profile">Update</button>
     </div>`);
 
     // append the user to container
     $('.profile-container').append($user)
-  
 
+  }
+
+  function renderProfileUpdate () {
+    const $profileUpdateForm = $(`      
+    <label for="user.id">User ID:</label>
+    <input type="text" id="user-id" name="user_id" placeholder="Your User ID">
+    <br>
+    <label for="first_name">First Name:</label>
+    <input type="text" id="first_name" name="first_name" placeholder="Your First Name"><br>
+    <br>
+    <label for="last_name">Last Name:</label>
+    <input type="text" id="last_name" name="last_name" placeholder="Your Last Name"><br>
+    <button class="button">Update</button>
+    `)
   }
 
   $('.upload-form').on('submit', function (event) {
@@ -69,12 +83,6 @@ $(() => {
     $.get('/api/posts/mine', (posts) => {
       renderPosts(posts, '#user-post-container')
     })
-
-    // left screen 
-    // $.get('/api/users', (users) => {
-    //   renderProfileContainer(user)
-    //   $('#profile-container').show()
-    // })
 
     const user = {
       id: 1,
@@ -106,8 +114,16 @@ $(() => {
     })
   })
 
+  $('.profile-container').on('click', '.button', function() {
+    //const post_id = $(this).closest('.post').data('id')
+    //$.post(`/api/posts/${post_id}/like`, () => {
+      // renderPost(post_id)
+    })
+  
+
   // Initial load of the page
   loadPosts()
   $('.upload-form').toggle()
 })
+
 
