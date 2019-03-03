@@ -19,14 +19,15 @@ module.exports = (knex) => {
 
     try {
       const posts = await knex('posts')
-      .join('post_metadata', 'posts.id', '=', 'post_metadata.post_id')
+      .leftJoin('post_metadata', 'posts.id', '=', 'post_metadata.post_id')
       .select('posts.id', 'posts.title', 'posts.description',  'posts.URL', 'posts.user_id')
+      .select(knex.raw('ROUND(AVG(post_metadata.rating),1) AS rating_average'))
       .count('post_metadata.like as like_count')
       .distinct('posts.id')
-      .groupBy('post_metadata.id', 'posts.id')
+      .groupBy('posts.id')
       res.send(posts)
     }
-    catch(error){
+    catch (error) {
       console.log(error)
       res.end('Something went wrong')
     }
@@ -67,14 +68,22 @@ module.exports = (knex) => {
   })
 
   // Takes a post id and returns the post record and its metadata
-  router.get('/:postId', (req, res) => {
+  router.get('/:postId', async (req, res) => {
     const {postId} = req.params
-    knex('posts')
-      .select('*')
-      .where('id', postId)
-      .then(post => {
-        res.json(post)
-      })
+    try {
+      const post = await knex('posts')
+        .leftJoin('post_metadata', 'posts.id', '=', 'post_metadata.post_id')
+        .select('posts.id', 'posts.title', 'posts.description',  'posts.URL', 'posts.user_id')
+        .select(knex.raw('ROUND(AVG(post_metadata.rating),1) as rating_average'))
+        .count('post_metadata.like as like_count')
+        .where('posts.id', postId)
+        .first()
+        .distinct('posts.id')
+        .groupBy('posts.id')
+      res.send(post)
+    } catch (error) {
+      console.log(error)
+    }
   })
   
   // Send back all posts that this user liked
@@ -91,7 +100,7 @@ module.exports = (knex) => {
     try {
       // Get the post_metadata based on user and post
       const user_post_relation = await knex('post_metadata')
-      .select('*')
+      .select('like')
       .first()
       .where('user_id', '=', user_id)
       .andWhere('post_id', '=', post_id)
@@ -105,7 +114,6 @@ module.exports = (knex) => {
         .update({
           like: newLike
         })
-
       } else {
         // if no previous relation, insert new record
         await knex('post_metadata')
@@ -119,6 +127,45 @@ module.exports = (knex) => {
     } catch (error) {
       console.log(error)
     }
+
+  })
+
+  router.post('/:postId/rating', async (req, res) => {
+    const user_id = req.session.userId
+    const post_id = Number(req.params.postId)
+    const ratingSubmitted = Number(req.body.rating)
+    
+    try {
+      // Get the post_metadata based on user and post
+      const user_post_relation = await knex('post_metadata')
+      .select('rating')
+      .first()
+      .where('user_id', '=', user_id)
+      .andWhere('post_id', '=', post_id)
+
+      if (user_post_relation) {
+        // If theres is a record, update to the curent rating
+        const newLike = user_post_relation.like === 1 ? 0 : 1
+        await knex('post_metadata')
+        .where('user_id', '=', user_id)
+        .andWhere('post_id', '=', post_id)
+        .update({
+          rating: ratingSubmitted
+        })
+      } else {
+        // if no previous relation, insert new record
+        await knex('post_metadata')
+        .insert({
+          like: 1, 
+          rating: 0, 
+          user_id,
+          post_id})
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
+
 
   })
 
