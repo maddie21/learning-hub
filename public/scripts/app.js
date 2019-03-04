@@ -1,49 +1,69 @@
-//$(() =>
-$(document).ready(function () {
-
-  function createPost(post) {
-    return $(`<div class="post" data-id=${post.id}>
-
-    <p><a href="#clickPost" rel="modal:open">Open Modal</a></p>
- 
-      <p class="post-title">${post.title}</p>
-
+$(() => {
+  const getPostFormHTML = () => {
+    return `
+    <form action="/api/posts" method="POST" class="upload-form">
+      <input type="textarea" name="title" placeholder="Title">
+      <input type="text" name="URL" placeholder="Url of your resource">
+      <textarea name="description" placeholder="People should read it because..." cols="30" rows="10"></textarea>
+      <input name="category_name" id="category-input" list="categories" name="categories" placeholder="category">
       
-      <p class="post-url"><a href=${post.URL}>${post.URL}</a></p>
-      <p class="post-description">${post.description}</p>
-      <p class="post-author">user ${post.user_id}</p>
-      
-      <div class="social-icon-wrapper">
-     
-        <i class="fas fa-heart"></i>
-        <i class ="likes">${post.like_count}</i>
-        <i class="far fa-comment"></i>
-        <i class="fas fa-star-half-alt"></i>
-        <i class ="ratings">${post.rating_average}</i>
+      <datalist id="categories">
+        <option value="Design">
+        <option value="Sports">
+        <option value="Technology">
+        <option value="Music">
+        <option value="Politics">
+      </datalist> 
+      <input class="post-button" type="submit" value="Upload"> 
+    </form>
+  `}
 
+  // Get sample user name
+  const getUsername = userId => {
+    switch(userId) {
+      case 1: return 'alice123';
+      case 2: return 'MrBob';
+      case 3: return 'brown';
+      default: return 'stranger';
+    }
+  }
+
+  const createPostHTML = post => {
+    return `
+    <div class="post" data-id=${post.id}>
+      <div class="post-content">
+        <div class="post-header">
+          <p class="post-title">${post.title}</p>
+          <p class="post-url"><a href="${post.URL}" target="_blank">read more</a></p>
+          <p class="post-author">@${getUsername(post.user_id)}</p>
+        </div>
+
+        <p class="post-description">${post.description}</p>
+        <div class="post-social">
+          <i class="fas fa-heart"></i>
+          <i class ="likes">${post.like_count || 0}</i>
+          <i class="far fa-comment">${getComments(post.id).length || 0 }</i>
+          <i class="fas fa-star-half-alt"></i>
+          <i class ="ratings">${post.rating_average || ''}</i>
+        </div>
       </div>
-
-      <div id="clickPost" class="modal">
-      <p class="post-title">${post.title}</p>
-      <p class="post-description">${post.description}</p>
-      <p class="post-author">user ${post.user_id}</p>
-      <a href="#" rel="modal:close">Close</a>
-  </div>
-  
-
-   
-
-    </div>`);
+      <div class="post-comments"></div>
+    </div>
+    `
   }
 
   // @params: array of posts to render, and a designated container
-  function renderPosts(posts, container) {
-    $('#post-container').html('')
-    $('#user-post-container').html('')
-
-    posts.forEach(post => {
-      $(container).prepend(createPost(post))
-    })
+  function renderPosts(posts, eraseContainer = true) {
+    if (eraseContainer) {
+      $('#post-container').html('')
+      posts.forEach(post => {
+        $(createPostHTML(post)).hide().prependTo('#post-container').slideDown('easing');
+      })
+    } else {
+      posts.forEach(post => {
+        $(createPostHTML(post)).hide().appendTo('#post-container').slideDown('easing')
+      })
+    }
   }
 
   // Load all posts and render it
@@ -54,54 +74,64 @@ $(document).ready(function () {
     }).done((response) => {
       if(response.status === 'success') {
         const posts = response.data
-        renderPosts(posts, '#post-container')
+        renderPosts(posts)
       } else {
         console.log(response.errors)
       }
     })
+    .catch(error => console.log(error))
   }
 
-  function renderProfileContainer (user) {
-    // create a jquery user profile
-    const $user = $(`<div class="users" data-id=${user.id}>
-    <p class="user-id">User ID:${user.id}</p>
-    <p class="user-firstname">First name: ${user.first_name}</p>
-    <p class="user-lastname">Last name: ${user.last_name}</p>
-    <button class="button-update-profile">Update</button>
-    </div>`);
+  // Reload a given post
+  function refreshPost($post) {
+    const post_id = $post.data('id')
 
-    // append the user to container
-    $('.profile-container').append($user)
-
+    $.get(`/api/posts/${post_id}`, ({data}) => {
+      // $post.html('')
+      $post.replaceWith(createPostHTML(data))
+    })
   }
 
-  function renderProfileUpdate () {
-    const $profileUpdateForm = $(`<div class="profile-container" 
-    </br></br><label for="user_name">UserName:</label>
-    <input type="text" id="user-id" name="user_name" placeholder="Your User Name"></br></br>
-    <label for="password">Password: </label>
-    <input type="text" id="password" name="password" placeholder="Your Password"></br></br>
-    <label for="user_firstname">First name: </label>
-    <input type="text" id="first_name" name="first_name" placeholder="Your First Name"></br></br>
-    <label for="user_lastname">Last name: </label>
-    <input type="text" id="last_name" name="last_name" placeholder="Your Last Name"></br></br>
-    
-    <button class="button-update-profile">Update</button>
-    </div>`); 
-    $('.profile-container').append($profileUpdateForm)
-  }
-  // $('.profile-container').on('submit', function (event) {
-  //   event.preventDefault()
-  //   renderProfileUpdate();
-
-  // });
-
-  $('.profile-container').on('click', () => {
-    if($(".profile-container").children().length <=1){
-      renderProfileUpdate();
+  const renderSidebarContent = (htmlBlock, eraseContent = true) => {
+    if (eraseContent) {
+      $('.sidebar-content').html('')
     }
-  })
+    $(htmlBlock).hide().appendTo('.sidebar-content').slideDown('easing')
+  }
 
+  const createUserProfileHTML = user => {
+    return `
+    <div class="user">
+      <p class="user-username">@${user.username}</p>
+      <p class="user-full-name">${user.first_name} ${user.last_name}</p>
+      <button class="btn btn-light" id="button-profile-update">Update</button>
+    </div>
+    `
+  }
+
+  const getComments = postId => $.get(`api/posts/${postId}/comments`, (comments) => comments)
+
+  const getCommentHTML = comment => {
+    return `
+      <div class="comment">
+        ${comment.content}
+      </div>
+    `
+  }
+
+  const renderCommentsByPost = (comments, $post) => {
+    const commentArea = $post.children('.post-comments')
+    console.log(commentArea)
+    comments.forEach(comment => {
+
+      $(commentArea).append($(getCommentHTML(comment)))
+      // $(getCommentHTML(comment)).appendTo(commentArea)
+    })
+    console.log(commentArea)
+
+  }
+
+  // Event listeners
   $('.upload-form').on('submit', function (event) {
     event.preventDefault()
     
@@ -113,57 +143,63 @@ $(document).ready(function () {
 
   // Toggle post form on click
   $('#post-resource').on('click', () => {
-    $('.upload-form').slideToggle('ease')
+    renderSidebarContent(getPostFormHTML())
   })
 
-  // Load current user posts
+  // Load current user profile and posts
   $('#my-resources').on('click', () => {
+    // Render profile in the sidebar
+    $.get('/api/users/mine', ({data}) => renderSidebarContent(createUserProfileHTML(data)))
+
+    // posts created by current user
     $.get('/api/posts/mine', (response) => {
       if (response.status === 'success') {
-        const posts = response.data
-        renderPosts(posts, '#user-post-container')
+        $('#post-container').html('<h1>My resources</h1>')
+        const createdPosts = response.data
+        renderPosts(createdPosts, false)
       } else {
         console.log(response.errors)
       }
     })
 
-    $.get('api/users/mine', (user) =>{
-      if($(".profile-container").children().length == 0){
-        renderProfileContainer(user);
+    // posts liked by current user
+    $.get('/api/posts/mine/like', (response) => {
+      if (response.status === 'success') {
+        $('#post-container').append('<h1>My Favourites</h1>')
+        const posts = response.data
+        console.log('liked posts: ', posts)
+        renderPosts(posts, false)
+      } else {
+        console.log(response.errors)
       }
-      
     })
 
   })
 
   // Loads all posts when click site title
-  $('.page-title').on('click', () => {
-    loadPosts()
-  })
-
-  // logs user1 in
-  $('#login-li').on('click', () => {
-    $.get('/login/1')
-  })  
-
+  $('.page-title').on('click', () => loadPosts())
 
   $('#post-container').on('click', '.fa-heart', function() {
-    const post_id = $(this).closest('.post').data('id')
-    $.post(`/api/posts/${post_id}/like`, () => {
-      loadPosts()
+    const $post = $(this).closest('.post')
+    const postId = $post.data('id')
+    
+    $.post(`/api/posts/${postId}/like`, () => {
+      refreshPost($post)
     })
   })
 
-  $('.profile-container').on('click', '.button', function() {
-    //const post_id = $(this).closest('.post').data('id')
-    //$.post(`/api/posts/${post_id}/like`, () => {
-      // renderPost(post_id)
+  $('#post-container').on('click', '.fa-comment', function() {
+    const $post = $(this).closest('.post')
+    const postId = $post.data('id')
+    
+    $.get(`/api/posts/${postId}/comments`, ({data}) => {
+      renderCommentsByPost(data, $post)
     })
-  
+  })
 
   // Initial load of the page
+  $('.upload-form').toggle()
   loadPosts()
-
 })
 
 

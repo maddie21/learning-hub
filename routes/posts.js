@@ -32,8 +32,13 @@ module.exports = (knex) => {
   router.get('/mine', async (req, res) => {
     try {
       const posts = await knex('posts')
-        .select('*')
-        .where('user_id', req.session.userId)
+        .leftJoin('post_metadata', 'posts.id', '=', 'post_metadata.post_id')
+        .select('posts.id', 'posts.title', 'posts.description',  'posts.URL', 'posts.user_id')
+        .select(knex.raw('ROUND(AVG(post_metadata.rating),1) as rating_average'))
+        .sum('post_metadata.like as like_count')
+        .where('posts.user_id', req.session.userId)
+        .distinct('posts.id')
+        .groupBy('posts.id')
       return respondSuccess(res, posts)
     } 
     
@@ -110,21 +115,17 @@ module.exports = (knex) => {
         .leftJoin('post_metadata', 'posts.id', '=', 'post_metadata.post_id')
         .select('posts.id', 'posts.title', 'posts.description',  'posts.URL', 'posts.user_id')
         .select(knex.raw('ROUND(AVG(post_metadata.rating),1) as rating_average'))
-        .count('post_metadata.like as like_count')
+        .sum('post_metadata.like as like_count')
         .where('posts.id', postId)
         .first()
         .distinct('posts.id')
         .groupBy('posts.id')
       
-        if(post === undefined) {
-        return respondFailure(res, [
-          `Cannot find post with the given post id ${postId}.`
-        ])
+      if (post === undefined) {
+        return respondFailure(res, [`Cannot find post with the given post id ${postId}.`])
       }
-
       return respondSuccess(res, post)
     } 
-    
     catch (exception) {
       console.log(exception)
       return respondFailure(res, [
@@ -140,12 +141,12 @@ module.exports = (knex) => {
     try {
       const posts = await knex('posts')
         .leftJoin('post_metadata', 'posts.id', '=', 'post_metadata.post_id')
-        .select('posts.id as post_id', 'posts.title', 'posts.description',  'posts.URL', 'posts.user_id as author_id')
+        .select('posts.id', 'posts.title', 'posts.description',  'posts.URL', 'posts.user_id')
         .select(knex.raw('ROUND(AVG(post_metadata.rating),1) as rating_average'))
         .count('post_metadata.like as like_count')
         .where('post_metadata.user_id', userId)
         .andWhere('post_metadata.like', 1)
-        .distinct('posts.id as post_id')
+        .distinct('posts.id')
         .groupBy('posts.id')
 
       return respondSuccess(res, posts)
@@ -316,7 +317,6 @@ module.exports = (knex) => {
 
   router.get('/category/:categoryId', (req, res) => {
     const category_id = Number(req.params.categoryId)
-    console.log(category_id)
     
     knex('posts')
       .leftJoin('post_metadata', 'posts.id', '=', 'post_metadata.post_id')
