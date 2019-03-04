@@ -247,5 +247,23 @@ module.exports = (knex) => {
 
   })
 
+  router.get('/:postId/comments', async (req, res) => {
+    const post_id = Number(req.params.postId)
+    try {
+      const comments = await knex('comments')
+        .select('content', 'create_time')
+        .where('post_id', '=', post_id)
+      
+      return respondSuccess(res, comments)
+    }
+
+    catch (exception) {
+      console.log(exception)
+      respondFailure(res, [
+        'Error retrieving comments from database'
+      ])
+    }
+  })
+
   return router;
 }
