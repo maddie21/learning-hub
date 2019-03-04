@@ -6,6 +6,21 @@ const {respondFailure, respondSuccess} = require('../utility.js')
 
 module.exports = (knex) => {
 
+  router.get('/mine', (req, res) => {
+    const currentUserId = Number(req.session.userId)
+
+    knex('users')
+      .select('*')
+      .first()
+      .where('id', '=', currentUserId)
+      .then(user => {
+        return respondSuccess(res, user)
+      })
+      .catch(error => {
+        return respondFailure(res, ['Error retrieving current user.'])
+      })
+  })
+
   router.get("/", (req, res) => {
     knex
       .select("*")
@@ -32,24 +47,10 @@ module.exports = (knex) => {
     const user_id = req.params.userId
     knex('users')
       .select('*')
-      .where('id', '=', user_id)
       .first()
+      .where('id', '=', user_id)
       .then(user => respondSuccess(res, user))
       .catch(exception => respondFailure(res, ['Error retrieving user by id.']))
-  })
-
-  router.get('/mine', (req, res) => {
-    const currentUserId = req.session.userId
-    knex('users')
-      .select('*')
-      .first()
-      .where('id', currentUserId)
-      .then( user => {
-        return respondSuccess(res, user)
-      })
-      .catch(error => {
-        return respondFailure(res, ['Error retrieving current user.'])
-      })
   })
 
   router.post('/mine', (req, res) => {

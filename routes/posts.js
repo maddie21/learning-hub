@@ -52,9 +52,9 @@ module.exports = (knex) => {
 
   // Takes a new post object and add it to the database
   router.post('/', (req, res) => {
-    const {title, URL, description, category_name} = req.body
+    const {title, URL, description} = req.body
     const user_id = req.session.userId
-    if (title === undefined || URL === undefined || description === undefined || category_name === undefined) {
+    if (title === undefined || URL === undefined || description === undefined) {
       return respondFailure(res, [
         'Missing prameters: must give title, URL, description, category_name.'
       ])
@@ -75,8 +75,10 @@ module.exports = (knex) => {
 
   })
 
-  router.get('/search', (req, res) => {
+  router.post('/search', (req, res) => {
+    
     const {keyword} = req.body
+    console.log('keyword: ', keyword)
     if (keyword === '' || keyword === undefined) {
       return respondSuccess(res, [
         'Missing parameters: must give keyword which is not an empty string.'
@@ -269,7 +271,7 @@ module.exports = (knex) => {
     const post_id = Number(req.params.postId)
     try {
       const comments = await knex('comments')
-        .select('content', 'create_time')
+        .select('content', 'create_time', 'user_id')
         .where('post_id', '=', post_id)
       
       return respondSuccess(res, comments)
@@ -303,9 +305,9 @@ module.exports = (knex) => {
     }
 
     knex('comments')
-      .insert(newComment)
-      .then( () => {
-        return respondSuccess(res)
+      .insert(newComment, '*')
+      .then((newAddedComment) => {
+        return respondSuccess(res, newAddedComment)
       })
       .catch (exception => {
         console.log(exception)
