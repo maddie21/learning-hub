@@ -2,6 +2,7 @@
 
 const express = require('express');
 const router  = express.Router();
+const {respondFailure, respondSuccess} = require('../utility.js')
 
 module.exports = (knex) => {
 
@@ -51,6 +52,12 @@ module.exports = (knex) => {
       .catch(error => {
         console.log(error)
       })
+  })
+
+  router.post('/mine', (req, res) => {
+    const currentUserId = req.session.userId
+    console.log(req.params)
+    return respondSuccess(res)
   })
 
 

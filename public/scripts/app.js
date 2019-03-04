@@ -37,8 +37,13 @@ $(() => {
     $.ajax({
       method: "GET",
       url: "/api/posts"
-    }).done((posts) => {
-      renderPosts(posts, '#post-container')
+    }).done((response) => {
+      if(response.status === 'success') {
+        const posts = response.data
+        renderPosts(posts, '#post-container')
+      } else {
+        console.log(response.errors)
+      }
     })
   }
 
@@ -119,9 +124,13 @@ $(() => {
 
   // Load current user posts
   $('#my-resources').on('click', () => {
-    // right screen
-    $.get('/api/posts/mine', (posts) => {
-      renderPosts(posts, '#user-post-container')
+    $.get('/api/posts/mine', (response) => {
+      if (response.status === 'success') {
+        const posts = response.data
+        renderPosts(posts, '#user-post-container')
+      } else {
+        console.log(response.errors)
+      }
     })
 
     $.get('api/users/mine', (user) =>{
