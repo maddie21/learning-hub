@@ -14,7 +14,7 @@ $(() => {
         <i class="fas fa-heart"></i>
         <i class ="likes">${post.like_count}</i>
         <i class="far fa-comment"></i>
-        <i class="fas fa-star-half-alt"></i>
+        <i class="fas fa-star"></i>
         <i class ="ratings">${post.rating_average}</i>
 
       </div>
@@ -62,7 +62,7 @@ $(() => {
   }
 
   function renderProfileUpdate () {
-    const $profileUpdateForm = $(`<div class="profile-update-form" 
+    const $profileUpdateForm = $(`<form class="profile-update-form" 
     </br></br><label for="user_name">UserName:</label>
     <input type="text" id="user-id" name="user_name" placeholder="Your User Name"></br></br>
     <label for="password">Password: </label>
@@ -72,8 +72,8 @@ $(() => {
     <label for="user_lastname">Last name: </label>
     <input type="text" id="last_name" name="last_name" placeholder="Your Last Name"></br></br>
     
-    <button class="button-update-profile">Update</button>
-    </div>`); 
+    <input type="submit" class="button-update-profile" value="submit">
+    </form>`); 
     $('.profile-container').append($profileUpdateForm)
   }
  
@@ -84,9 +84,10 @@ $(() => {
     }
   })
 
-  $('.upload-form').on('submit', function (event) {
+  $('.profile-container').on('submit', '.profile-upload-form', function (event) {
     event.preventDefault()
     
+    console.log('target:', event.target)
     const inputSerial = $(this).serialize()
     $.post('/api/posts', inputSerial, () => {
       loadPosts()
@@ -99,7 +100,7 @@ $(() => {
       method: "POST",
       url: "/api/users/mine"
     })
-   
+
   }
   $('.profile-update-form').on('submit', function (event) {
     event.preventDefault()

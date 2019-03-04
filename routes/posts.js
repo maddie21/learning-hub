@@ -14,6 +14,9 @@ module.exports = (knex) => {
       .then(row => {
         cb(row.id)
       })
+      .catch(exception => {
+        console.log(exception)
+      })
   }
 
   router.get("/", async (req, res) => {

@@ -56,7 +56,7 @@ module.exports = (knex) => {
 
   router.post('/mine', (req, res) => {
     const currentUserId = req.session.userId
-    console.log(req.params)
+    console.log('req.params', req.params)
     return respondSuccess(res)
   })
 
