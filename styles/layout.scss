@@ -1,19 +1,23 @@
-$primary-font-color: darkgrey;
+@import "kitty";
+
+$primary-font-color: rgb(143, 137, 137);
 $secondary-font-color: lightgrey;
 $alert-color: #e27d60;
 
-$primary-background-color: #eee;
+$primary-background-color: #EEE;
+$secondary-background-color: #659dbd;
+$other-background-color: rgb(138, 134, 131);
+
 $secondary-background-color: #659DBD;
-$other-background-color: #BC986A;
+$other-background-color: rgb(172, 102, 109);
 
 html {
   padding: 0;
 }
 
-body{
+body {
   background-color: $other-background-color;
-  font-family: 'Open Sans', sans-serif;
-  padding: 0;
+  font-family: "Open Sans", sans-serif;
 }
 
 form#header {
@@ -36,65 +40,165 @@ div.name {
 }
 
 div.nav-bar {
-  top:0;
+  top: 0;
   display: block;
 }
 
-main {
-  text-align: center;
+datalist {
+  display: none;
+  position: fixed;
 }
 
 #post-container {
-  margin: 20px;
+  padding: 10px;
+}
+
+#post-container h1 {
+  margin: 40px auto 0 30px;
+  color: white;
 }
 
 .post {
-  display: inline-block;
-  width: 400px;
-  height: 300px;
-  background: $primary-background-color;
+  height: 200px;
+  background: white;
   padding: 30px;
   border-radius: 10px;
-  margin: 10px;
+  margin: 25px;
   overflow: hidden;
+  position: relative;
+  -webkit-box-shadow: 10px 10px 55px -19px rgba(0,0,0,0.75);
+  -moz-box-shadow: 10px 10px 55px -19px rgba(0,0,0,0.75);
+  box-shadow: 10px 10px 55px -19px rgba(0,0,0,0.75);
+  transition: all 0.6s ease;
 }
 
 .post:hover {
-  cursor: pointer;
-  transform: scale(1.05);
+  -webkit-box-shadow: 10px 10px 28px -19px rgba(0,0,0,0.75);
+  -moz-box-shadow: 10px 10px 28px -19px rgba(0,0,0,0.75);
+  box-shadow: 10px 10px 28px -19px rgba(0,0,0,0.75);
   transition: all 0.4s ease;
+}
+
+.post-content {
+  display: flex;
+}
+
+.post-header {
+  flex: 2;
 }
 
 .post-title {
   color: firebrick;
   font-weight: 700;
-  text-align: center;
-  font-size: 2rem;
+  text-align: left;
+  font-size: 1.5rem;
 }
 
 .post-description {
-  opacity: .9;
+  opacity: 0.9;
+  margin-left: 5px;
+  flex: 3;
 }
 
 .post-url {
-  color: plum;
+  text-align: left;
+  opacity: .5;
+}
+
+.post-social {
+  flex: 1;
 }
 
 .upload-form {
   background: $secondary-background-color;
-  padding: 10px;
-  margin: 10px;
   border-radius: 10px;
   text-align: center;
-  justify-content: center;
-  width: 800px;
 }
 
 .upload-form * {
-  display: block;
-  margin: 10px auto;
-  padding: 20px 10px;
   border: none;
-  width: 80%;
+  margin: 10px 0;
+  width: 90%;
+  padding: 10px;
+}
+
+.post-button {
+  border-radius: 15px;
+  width: 70%;
+  margin: 10px auto;
+}
+
+.post-button:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+  transition: 0.3s all ease;
+}
+
+.index-main {
+  margin-left: 350px;
+}
+
+.sidebar {
+  height: 100%;
+  width: 350px;
+  background: $secondary-background-color;
+  position: fixed;
+  z-index:1;
+  top: 0;
+  left: 0;
+  overflow-x:hidden;
+  padding: 20px;
+  color: white;
+  -webkit-box-shadow: 10px 10px 55px -19px rgba(0,0,0,0.75);
+  -moz-box-shadow: 10px 10px 55px -19px rgba(0,0,0,0.75);
+  box-shadow: 10px 10px 55px -19px rgba(0,0,0,0.75);
+}
+
+.page-title {
+  margin: 1em 0 0.5em 0;
+  color: lightblue;
+	font-weight: bolder;
+	font-size: 36px;
+	line-height: 42px;
+  font-size: 2.5rem;
+}
+
+.page-title:hover {
+  cursor: pointer;
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding-left: 3px;
+}
+
+.sidebar-menu li {
+  line-height: 3rem;
+  font-size: 1.5rem;
+}
+
+.sidebar-menu li:hover {
+  cursor: pointer;
+  text-decoration: underline;
+  transition: all 0.4s ease;
+}
+
+.social-icon-wrapper {
+  height: 100%;
+  color: rgb(31, 194, 132);
+  user-select: none;
+  background-color: red;
+}
+
+.social-icon-wrapper:hover{
+  cursor: pointer;
+  filter: brightness(90%);
+  color: rgb(213, 136, 70);
+  
+}
+
+.users {
+  font-weight: 700;
+  color: rgb(55, 51, 51);
 }
 
