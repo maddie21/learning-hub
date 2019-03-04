@@ -12,9 +12,9 @@ $(() => {
   // Get sample user name
   const getUsername = userId => {
     switch(userId) {
-      case 1: return 'alice123';
-      case 2: return 'MrBob';
-      case 3: return 'brown';
+      case 1: return 'alice12';
+      case 2: return 'bob13';
+      case 3: return 'mrCharlie14';
       default: return 'stranger';
     }
   }
@@ -95,6 +95,7 @@ $(() => {
     $.get(`/api/posts/${post_id}`, ({data}) => {
       // $post.html('')
       $post.replaceWith(createPostHTML(data))
+      $post.children('.post-comments-upload').hide()
     })
   }
 
