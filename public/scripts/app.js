@@ -1,9 +1,13 @@
-$(() => {
+//$(() =>
+$(document).ready(function () {
 
   function createPost(post) {
     return $(`<div class="post" data-id=${post.id}>
+
+    <p><a href="#clickPost" rel="modal:open">Open Modal</a></p>
+ 
       <p class="post-title">${post.title}</p>
-     
+
       
       <p class="post-url"><a href=${post.URL}>${post.URL}</a></p>
       <p class="post-description">${post.description}</p>
@@ -18,6 +22,16 @@ $(() => {
         <i class ="ratings">${post.rating_average}</i>
 
       </div>
+
+      <div id="clickPost" class="modal">
+      <p class="post-title">${post.title}</p>
+      <p class="post-description">${post.description}</p>
+      <p class="post-author">user ${post.user_id}</p>
+      <a href="#" rel="modal:close">Close</a>
+  </div>
+  
+
+   
 
     </div>`);
   }
@@ -158,7 +172,7 @@ $(() => {
   $('#post-container').on('click', '.fa-heart', function() {
     const post_id = $(this).closest('.post').data('id')
     $.post(`/api/posts/${post_id}/like`, () => {
-      // renderPost(post_id)
+      loadPosts()
     })
   })
 

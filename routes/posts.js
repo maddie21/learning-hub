@@ -6,30 +6,19 @@ const {respondFailure, respondSuccess} = require('../utility.js')
 
 module.exports = (knex) => {
 
-  const getCategoryId = (category_name, cb) => {
-    knex('categories')
-      .select('id')
-      .where('category_name', category_name)
-      .first()
-      .then(row => {
-        cb(row.id)
-      })
-      .catch(exception => {
-        console.log(exception)
-      })
-  }
-
   router.get("/", async (req, res) => {
 
     try {
       const posts = await knex('posts')
         .leftJoin('post_metadata', 'posts.id', '=', 'post_metadata.post_id')
-        .select('posts.id', 'posts.title', 'posts.description',  'posts.URL', 'posts.user_id')
+        .select('posts.id', 'posts.title', 'posts.description',  'posts.URL', 'posts.user_id', 'posts.create_time')
         .select(knex.raw('ROUND(AVG(post_metadata.rating),1) AS rating_average'))
-        .count('post_metadata.like as like_count')
+        .sum('post_metadata.like as like_count')
         .distinct('posts.id')
         .groupBy('posts.id')
-      return respondSuccess(res, posts)
+        .orderBy('posts.create_time', 'asc')
+
+        return respondSuccess(res, posts)
     }
     catch (error) {
       console.error(error)
@@ -67,22 +56,18 @@ module.exports = (knex) => {
       ])
     }
 
-    getCategoryId(category_name, (categories_id) => {
-      knex('posts')
-        .insert({title, description, URL, user_id})
-        .returning('id')
-        .then((post_id) => {
-          // Use the {category_id, post_id} to insert to post_categories table
-          knex('post_categories')
-            .insert({post_id: Number(post_id), categories_id})
-            .then(() => {
-              res.redirect('/api/posts')
-            })
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    })
+    knex('posts')
+      .insert({title, description, URL, user_id})
+      .returning('id')
+      .then(() => {
+        return respondSuccess(res)
+      })
+      .catch(err => {
+        console.log(err)
+        return respondFailure(res, [
+          'Error inserting new post to database.'
+        ])
+      })
 
   })
 
@@ -158,31 +143,33 @@ module.exports = (knex) => {
     try {
       // Get the post_metadata based on user and post
       const user_post_relation = await knex('post_metadata')
-      .select('like')
-      .first()
-      .where('user_id', '=', user_id)
-      .andWhere('post_id', '=', post_id)
-
+        .select('like')
+        .first()
+        .where('user_id', '=', user_id)
+        .andWhere('post_id', '=', post_id)
       if (user_post_relation) {
+
         // If theres is a record, update and flip the like
         const newLike = user_post_relation.like === 1 ? 0 : 1
         await knex('post_metadata')
-        .where('user_id', '=', user_id)
-        .andWhere('post_id', '=', post_id)
-        .update({
-          like: newLike
-        })
+          .where('user_id', '=', user_id)
+          .andWhere('post_id', '=', post_id)
+          .update({
+            like: newLike
+          })
+        return respondSuccess(res)
       } else {
         // if no previous relation, insert new record
         await knex('post_metadata')
-        .insert({
-          like: 1, 
-          rating: null, 
-          user_id,
-          post_id})
+          .insert({
+            like: 1, 
+            rating: null, 
+            user_id,
+            post_id})
+        
+        return respondSuccess(res)
       }
 
-      return respondSuccess(res)
 
     } catch (exception) {
       console.log(exception)
@@ -244,6 +231,56 @@ module.exports = (knex) => {
       ])
     }
 
+  })
+
+  router.get('/:postId/comments', async (req, res) => {
+    const post_id = Number(req.params.postId)
+    try {
+      const comments = await knex('comments')
+        .select('content', 'create_time')
+        .where('post_id', '=', post_id)
+      
+      return respondSuccess(res, comments)
+    }
+
+    catch (exception) {
+      console.log(exception)
+      respondFailure(res, [
+        'Error retrieving comments from database'
+      ])
+    }
+  })
+
+  router.post('/:postId/comments', async (req, res) => {
+    const post_id = Number(req.params.postId)
+    const user_id = req.session.userId
+    const {comment_content} = req.body
+
+    // Check parameters
+    if (post_id === undefined || user_id === undefined || comment_content === undefined) {
+      return respondFailure(res, [
+        'Missing parameters: must give post_id, user_id, and comment_content'
+      ])
+    }
+    
+    const newComment = {
+      post_id, 
+      user_id, 
+      content: comment_content,
+      create_time: knex.raw('CURRENT_TIMESTAMP')
+    }
+
+    knex('comments')
+      .insert(newComment)
+      .then( () => {
+        return respondSuccess(res)
+      })
+      .catch (exception => {
+        console.log(exception)
+        return respondFailure(res, [
+          'Error inserting new comment into database'
+        ])
+      })
   })
 
   return router;
