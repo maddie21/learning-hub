@@ -6,16 +6,6 @@ const {respondFailure, respondSuccess} = require('../utility.js')
 
 module.exports = (knex) => {
 
-  const getCategoryId = (category_name, cb) => {
-    knex('categories')
-      .select('id')
-      .where('category_name', category_name)
-      .first()
-      .then(row => {
-        cb(row.id)
-      })
-  }
-
   router.get("/", async (req, res) => {
 
     try {
@@ -66,22 +56,18 @@ module.exports = (knex) => {
       ])
     }
 
-    getCategoryId(category_name, (categories_id) => {
-      knex('posts')
-        .insert({title, description, URL, user_id})
-        .returning('id')
-        .then((post_id) => {
-          // Use the {category_id, post_id} to insert to post_categories table
-          knex('post_categories')
-            .insert({post_id: Number(post_id), categories_id})
-            .then(() => {
-              res.redirect('/api/posts')
-            })
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    })
+    knex('posts')
+      .insert({title, description, URL, user_id})
+      .returning('id')
+      .then(() => {
+        return respondSuccess(res)
+      })
+      .catch(err => {
+        console.log(err)
+        return respondFailure(res, [
+          'Error inserting new post to database.'
+        ])
+      })
 
   })
 
@@ -263,6 +249,38 @@ module.exports = (knex) => {
         'Error retrieving comments from database'
       ])
     }
+  })
+
+  router.post('/:postId/comments', async (req, res) => {
+    const post_id = Number(req.params.postId)
+    const user_id = req.session.userId
+    const {comment_content} = req.body
+
+    // Check parameters
+    if (post_id === undefined || user_id === undefined || comment_content === undefined) {
+      return respondFailure(res, [
+        'Missing parameters: must give post_id, user_id, and comment_content'
+      ])
+    }
+    
+    const newComment = {
+      post_id, 
+      user_id, 
+      content: comment_content,
+      create_time: knex.raw('CURRENT_TIMESTAMP')
+    }
+
+    knex('comments')
+      .insert(newComment)
+      .then( () => {
+        return respondSuccess(res)
+      })
+      .catch (exception => {
+        console.log(exception)
+        return respondFailure(res, [
+          'Error inserting new comment into database'
+        ])
+      })
   })
 
   return router;
