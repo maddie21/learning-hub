@@ -71,6 +71,37 @@ module.exports = (knex) => {
 
   })
 
+  router.get('/search', (req, res) => {
+    const {keyword} = req.body
+    if (keyword === '' || keyword === undefined) {
+      return respondSuccess(res, [
+        'Missing parameters: must give keyword which is not an empty string.'
+      ])
+    }
+
+    knex('posts')
+      .leftJoin('post_metadata', 'posts.id', '=', 'post_metadata.post_id')
+      .select('posts.id', 'posts.title', 'posts.description',  'posts.URL', 'posts.user_id', 'posts.create_time')
+      .select(knex.raw('ROUND(AVG(post_metadata.rating),1) AS rating_average'))
+      .sum('post_metadata.like as like_count')
+      .distinct('posts.id')
+      .groupBy('posts.id')
+      .orderBy('posts.create_time', 'asc')
+      .where(
+        knex.raw('LOWER(posts.title) like ?', `%${keyword}%`)
+      )
+      .orWhere(
+        knex.raw('LOWER(posts.description) like ?', `%${keyword}%`)
+      )
+      .then(posts => respondSuccess(res, posts))
+      .catch(exception => {
+        console.log(exception)
+        return respondFailure(res, [
+          `Error retrieving posts with keyword ${keyword}`
+        ])
+      })
+  })
+
   // Takes a post id and returns the post record and its metadata
   router.get('/:postId', async (req, res) => {
     const {postId} = req.params
@@ -279,6 +310,31 @@ module.exports = (knex) => {
         console.log(exception)
         return respondFailure(res, [
           'Error inserting new comment into database'
+        ])
+      })
+  })
+
+  router.get('/category/:categoryId', (req, res) => {
+    const category_id = Number(req.params.categoryId)
+    console.log(category_id)
+    
+    knex('posts')
+      .leftJoin('post_metadata', 'posts.id', '=', 'post_metadata.post_id')
+      .select('posts.id', 'posts.title', 'posts.description',  'posts.URL', 'posts.user_id', 'posts.create_time')
+      .select(knex.raw('ROUND(AVG(post_metadata.rating),1) AS rating_average'))
+      .sum('post_metadata.like as like_count')
+      .distinct('posts.id')
+      .groupBy('posts.id')
+      .orderBy('posts.create_time', 'asc')
+      .where('category_id', '=', category_id)
+      .then(posts => {
+        return respondSuccess(res, posts)
+      })
+
+      .catch(exception => {
+        console.log(exception)
+        return respondFailure(res, [
+          'Error retrieving posts.'
         ])
       })
   })
