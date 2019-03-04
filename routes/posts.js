@@ -21,12 +21,14 @@ module.exports = (knex) => {
     try {
       const posts = await knex('posts')
         .leftJoin('post_metadata', 'posts.id', '=', 'post_metadata.post_id')
-        .select('posts.id', 'posts.title', 'posts.description',  'posts.URL', 'posts.user_id')
+        .select('posts.id', 'posts.title', 'posts.description',  'posts.URL', 'posts.user_id', 'posts.create_time')
         .select(knex.raw('ROUND(AVG(post_metadata.rating),1) AS rating_average'))
-        .count('post_metadata.like as like_count')
+        .sum('post_metadata.like as like_count')
         .distinct('posts.id')
         .groupBy('posts.id')
-      return respondSuccess(res, posts)
+        .orderBy('posts.create_time', 'asc')
+
+        return respondSuccess(res, posts)
     }
     catch (error) {
       console.error(error)
@@ -155,31 +157,33 @@ module.exports = (knex) => {
     try {
       // Get the post_metadata based on user and post
       const user_post_relation = await knex('post_metadata')
-      .select('like')
-      .first()
-      .where('user_id', '=', user_id)
-      .andWhere('post_id', '=', post_id)
-
+        .select('like')
+        .first()
+        .where('user_id', '=', user_id)
+        .andWhere('post_id', '=', post_id)
       if (user_post_relation) {
+
         // If theres is a record, update and flip the like
         const newLike = user_post_relation.like === 1 ? 0 : 1
         await knex('post_metadata')
-        .where('user_id', '=', user_id)
-        .andWhere('post_id', '=', post_id)
-        .update({
-          like: newLike
-        })
+          .where('user_id', '=', user_id)
+          .andWhere('post_id', '=', post_id)
+          .update({
+            like: newLike
+          })
+        return respondSuccess(res)
       } else {
         // if no previous relation, insert new record
         await knex('post_metadata')
-        .insert({
-          like: 1, 
-          rating: null, 
-          user_id,
-          post_id})
+          .insert({
+            like: 1, 
+            rating: null, 
+            user_id,
+            post_id})
+        
+        return respondSuccess(res)
       }
 
-      return respondSuccess(res)
 
     } catch (exception) {
       console.log(exception)
