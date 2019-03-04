@@ -32,8 +32,13 @@ module.exports = (knex) => {
   router.get('/mine', async (req, res) => {
     try {
       const posts = await knex('posts')
-        .select('*')
-        .where('user_id', req.session.userId)
+        .leftJoin('post_metadata', 'posts.id', '=', 'post_metadata.post_id')
+        .select('posts.id', 'posts.title', 'posts.description',  'posts.URL', 'posts.user_id')
+        .select(knex.raw('ROUND(AVG(post_metadata.rating),1) as rating_average'))
+        .sum('post_metadata.like as like_count')
+        .where('posts.user_id', req.session.userId)
+        .distinct('posts.id')
+        .groupBy('posts.id')
       return respondSuccess(res, posts)
     } 
     
@@ -71,6 +76,37 @@ module.exports = (knex) => {
 
   })
 
+  router.get('/search', (req, res) => {
+    const {keyword} = req.body
+    if (keyword === '' || keyword === undefined) {
+      return respondSuccess(res, [
+        'Missing parameters: must give keyword which is not an empty string.'
+      ])
+    }
+
+    knex('posts')
+      .leftJoin('post_metadata', 'posts.id', '=', 'post_metadata.post_id')
+      .select('posts.id', 'posts.title', 'posts.description',  'posts.URL', 'posts.user_id', 'posts.create_time')
+      .select(knex.raw('ROUND(AVG(post_metadata.rating),1) AS rating_average'))
+      .sum('post_metadata.like as like_count')
+      .distinct('posts.id')
+      .groupBy('posts.id')
+      .orderBy('posts.create_time', 'asc')
+      .where(
+        knex.raw('LOWER(posts.title) like ?', `%${keyword}%`)
+      )
+      .orWhere(
+        knex.raw('LOWER(posts.description) like ?', `%${keyword}%`)
+      )
+      .then(posts => respondSuccess(res, posts))
+      .catch(exception => {
+        console.log(exception)
+        return respondFailure(res, [
+          `Error retrieving posts with keyword ${keyword}`
+        ])
+      })
+  })
+
   // Takes a post id and returns the post record and its metadata
   router.get('/:postId', async (req, res) => {
     const {postId} = req.params
@@ -79,21 +115,17 @@ module.exports = (knex) => {
         .leftJoin('post_metadata', 'posts.id', '=', 'post_metadata.post_id')
         .select('posts.id', 'posts.title', 'posts.description',  'posts.URL', 'posts.user_id')
         .select(knex.raw('ROUND(AVG(post_metadata.rating),1) as rating_average'))
-        .count('post_metadata.like as like_count')
+        .sum('post_metadata.like as like_count')
         .where('posts.id', postId)
         .first()
         .distinct('posts.id')
         .groupBy('posts.id')
       
-        if(post === undefined) {
-        return respondFailure(res, [
-          `Cannot find post with the given post id ${postId}.`
-        ])
+      if (post === undefined) {
+        return respondFailure(res, [`Cannot find post with the given post id ${postId}.`])
       }
-
       return respondSuccess(res, post)
     } 
-    
     catch (exception) {
       console.log(exception)
       return respondFailure(res, [
@@ -109,12 +141,12 @@ module.exports = (knex) => {
     try {
       const posts = await knex('posts')
         .leftJoin('post_metadata', 'posts.id', '=', 'post_metadata.post_id')
-        .select('posts.id as post_id', 'posts.title', 'posts.description',  'posts.URL', 'posts.user_id as author_id')
+        .select('posts.id', 'posts.title', 'posts.description',  'posts.URL', 'posts.user_id')
         .select(knex.raw('ROUND(AVG(post_metadata.rating),1) as rating_average'))
         .count('post_metadata.like as like_count')
         .where('post_metadata.user_id', userId)
         .andWhere('post_metadata.like', 1)
-        .distinct('posts.id as post_id')
+        .distinct('posts.id')
         .groupBy('posts.id')
 
       return respondSuccess(res, posts)
@@ -279,6 +311,30 @@ module.exports = (knex) => {
         console.log(exception)
         return respondFailure(res, [
           'Error inserting new comment into database'
+        ])
+      })
+  })
+
+  router.get('/category/:categoryId', (req, res) => {
+    const category_id = Number(req.params.categoryId)
+    
+    knex('posts')
+      .leftJoin('post_metadata', 'posts.id', '=', 'post_metadata.post_id')
+      .select('posts.id', 'posts.title', 'posts.description',  'posts.URL', 'posts.user_id', 'posts.create_time')
+      .select(knex.raw('ROUND(AVG(post_metadata.rating),1) AS rating_average'))
+      .sum('post_metadata.like as like_count')
+      .distinct('posts.id')
+      .groupBy('posts.id')
+      .orderBy('posts.create_time', 'asc')
+      .where('category_id', '=', category_id)
+      .then(posts => {
+        return respondSuccess(res, posts)
+      })
+
+      .catch(exception => {
+        console.log(exception)
+        return respondFailure(res, [
+          'Error retrieving posts.'
         ])
       })
   })

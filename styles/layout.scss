@@ -1,3 +1,5 @@
+@import "kitty";
+
 $primary-font-color: rgb(143, 137, 137);
 $secondary-font-color: lightgrey;
 $alert-color: #e27d60;
@@ -8,7 +10,6 @@ $other-background-color: rgb(138, 134, 131);
 
 $secondary-background-color: #659DBD;
 $other-background-color: rgb(172, 102, 109);
-
 
 html {
   padding: 0;
@@ -48,10 +49,17 @@ datalist {
   position: fixed;
 }
 
+#post-container {
+  padding: 10px;
+}
+
+#post-container h1 {
+  margin: 40px auto 0 30px;
+  color: white;
+}
+
 .post {
-  display: inline-block;
-  width: 300px;
-  height: 300px;
+  height: 200px;
   background: white;
   padding: 30px;
   border-radius: 10px;
@@ -62,45 +70,43 @@ datalist {
   -moz-box-shadow: 10px 10px 55px -19px rgba(0,0,0,0.75);
   box-shadow: 10px 10px 55px -19px rgba(0,0,0,0.75);
   transition: all 0.6s ease;
-  
 }
 
 .post:hover {
-  cursor: pointer;
-  transform: scale(1.05);
   -webkit-box-shadow: 10px 10px 28px -19px rgba(0,0,0,0.75);
   -moz-box-shadow: 10px 10px 28px -19px rgba(0,0,0,0.75);
   box-shadow: 10px 10px 28px -19px rgba(0,0,0,0.75);
   transition: all 0.4s ease;
 }
 
+.post-content {
+  display: flex;
+}
+
+.post-header {
+  flex: 2;
+}
+
 .post-title {
   color: firebrick;
   font-weight: 700;
-  text-align: center;
-  font-size: 2rem;
+  text-align: left;
+  font-size: 1.5rem;
 }
 
 .post-description {
   opacity: 0.9;
   margin-left: 5px;
-
-
+  flex: 3;
 }
 
 .post-url {
-  text-align: center;
-  color: plum;
-  margin-top: -30px;
-
+  text-align: left;
+  opacity: .5;
 }
 
-.post-author {
-  color: $secondary-background-color;
-  position: absolute;
-  top: 0;
-  right: 20px;
-  
+.post-social {
+  flex: 1;
 }
 
 .upload-form {
@@ -143,18 +149,18 @@ datalist {
   overflow-x:hidden;
   padding: 20px;
   color: white;
+  -webkit-box-shadow: 10px 10px 55px -19px rgba(0,0,0,0.75);
+  -moz-box-shadow: 10px 10px 55px -19px rgba(0,0,0,0.75);
+  box-shadow: 10px 10px 55px -19px rgba(0,0,0,0.75);
 }
 
 .page-title {
   margin: 1em 0 0.5em 0;
-  color: #343434;
+  color: lightblue;
 	font-weight: bolder;
-	font-family: 'Ultra', sans-serif;   
 	font-size: 36px;
 	line-height: 42px;
-	text-transform: uppercase;
-	text-shadow: 0 2px white, 0 3px #777;
-  font-size: 3rem;
+  font-size: 2.5rem;
 }
 
 .page-title:hover {
@@ -177,20 +183,11 @@ datalist {
   transition: all 0.4s ease;
 }
 
-.user-post-container * {
-  display: inline-block;
-}
-
 .social-icon-wrapper {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left:0;
-  padding-bottom: 10px;
-  padding-left: 10px;
+  height: 100%;
   color: rgb(31, 194, 132);
-  border-top: 2px solid rgb(109, 100, 100);
-  padding-top: 7px;
+  user-select: none;
+  background-color: red;
 }
 
 .social-icon-wrapper:hover{

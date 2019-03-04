@@ -15,7 +15,7 @@ module.exports = (knex) => {
     });
   });
 
-  // Takes a new post object and add it to the database
+  // Takes a new user and add it to the database
   router.post('/', (req, res) => {
     const {username, password, first_name, last_name} = req.body
     
@@ -27,18 +27,16 @@ module.exports = (knex) => {
       })
   });
 
-  // post to enable users to update their profile information
-  router.post('api/users/mine', (req, res) => {
-    const {username, password, first_name, last_name} = req.body
-    const currentUserId = req.session.userId
+  // Looks up user record by id
+  router.get('/:userId', (req, res) => {
+    const user_id = req.params.userId
     knex('users')
-      .insert({username, password, first_name, last_name})
-      .where('id', currentUserId)
-      .then(r => res.redirect('/api/users'))
-      .catch(err => {
-        console.log(err)
-      })
-  });
+      .select('*')
+      .where('id', '=', user_id)
+      .first()
+      .then(user => respondSuccess(res, user))
+      .catch(exception => respondFailure(res, ['Error retrieving user by id.']))
+  })
 
   router.get('/mine', (req, res) => {
     const currentUserId = req.session.userId
@@ -47,10 +45,10 @@ module.exports = (knex) => {
       .first()
       .where('id', currentUserId)
       .then( user => {
-        res.send(user)
+        return respondSuccess(res, user)
       })
       .catch(error => {
-        console.log(error)
+        return respondFailure(res, ['Error retrieving current user.'])
       })
   })
 
