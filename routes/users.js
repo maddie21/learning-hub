@@ -27,7 +27,7 @@ module.exports = (knex) => {
   });
 
   // post to enable users to update their profile information
-  router.post('/userId', (req, res) => {
+  router.post('api/users/mine', (req, res) => {
     const {username, password, first_name, last_name} = req.body
     const currentUserId = req.session.userId
     knex('users')

@@ -57,7 +57,7 @@ $(() => {
   }
 
   function renderProfileUpdate () {
-    const $profileUpdateForm = $(`<div class="profile-container" 
+    const $profileUpdateForm = $(`<div class="profile-update-form" 
     </br></br><label for="user_name">UserName:</label>
     <input type="text" id="user-id" name="user_name" placeholder="Your User Name"></br></br>
     <label for="password">Password: </label>
@@ -92,19 +92,24 @@ $(() => {
   function updateUser(user) {
     $.ajax({
       method: "POST",
-      url: "/api/users/userId"
+      url: "/api/users/mine"
     })
-    console.log(user);
-    debugger;
+   
   }
-  $('.???).on('submit', function (event) {
+  $('.profile-update-form').on('submit', function (event) {
     event.preventDefault()
     
     const inputSerial = $(this).serialize()
-    $.post('/api/users/userId', inputSerial, () =>{
-      updateUser(inputSerial);
+    $.post('/api/users/mine', inputSerial, () =>{
+      $.get('api/users/mine', (user) =>{
+      
+        if($(".profile-container").children().length == 0){
+          renderProfileContainer(user);
+        }
+        
+      })
     })
-    renderProfileUpdate()
+    // renderProfileUpdate()
   })
 
   // Toggle post form on click
