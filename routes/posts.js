@@ -77,8 +77,7 @@ module.exports = (knex) => {
 
   router.post('/search', (req, res) => {
     
-    const {keyword} = req.body
-    console.log('keyword: ', keyword)
+    const keyword = req.body.keyword.toLowerCase()
     if (keyword === '' || keyword === undefined) {
       return respondSuccess(res, [
         'Missing parameters: must give keyword which is not an empty string.'
