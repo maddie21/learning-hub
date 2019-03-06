@@ -28,9 +28,11 @@ Suggestion: When cloning, specify a different folder name that is relevant to yo
 
 ## Final Product 
 
-!["Screenshot of "]()
-!["Screenshot of "]()
-!["Screenshot of "]()
+!["Screenshot of My Resources Page"](https://github.com/xwang1000/learning-hub/blob/frontend/docs/ResourceWall-MyResources.png?raw=true)
+!["Screenshot of Search results"](https://github.com/xwang1000/learning-hub/blob/frontend/docs/ResourceWall-search.png?raw=true)
+!["Screenshot of My Posts"](https://github.com/xwang1000/learning-hub/blob/frontend/docs/ResourceWall-myposts.png?raw=true)
+!["Screenshot of others' posts"](https://github.com/xwang1000/learning-hub/blob/frontend/docs/ResourceWall-othersposts.png?raw=true)
+!["Screenshot of comments section"](https://github.com/xwang1000/learning-hub/blob/frontend/docs/Resourcewall-comments.png?raw=true)
 
 
 
