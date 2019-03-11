@@ -1,39 +1,36 @@
-# RESOURCE WALL Project
+# Learning Hub
 
-Resource Wall is a simple, single-page web application. Pinterest for learners.
-
-Allows learners to save learning resources like tutorials, blogs and videos in a central place that is publicly available to any user.
-
-## Project Setup
-
-1. Create your own empty repo on GitHub
-2. Clone this repository (do not fork)
-Suggestion: When cloning, specify a different folder name that is relevant to your project
-3. Remove the git remote: git remote rm origin
-4. Add a remote for your origin: git remote add origin <your github repo URL>
-5. Push to the new origin: git push -u origin master
-6. Verify that the skeleton code now shows up in your repo on GitHub
-
-## Getting Started
-1. Create the .env by using .env.example as a reference: cp .env.example .env
-2. Update the .env file with your correct local information
-3. Install dependencies: npm i
-4. Fix to binaries for sass: npm rebuild node-sass
-5. Run migrations: npm run knex migrate:latest
-   Check the migrations folder to see what gets created in the DB
-6. Run the seed: npm run knex seed:run
-   Check the seeds file to see what gets seeded in the DB
-7. Run the server: npm run local
-8. Visit http://localhost:8080/
+Learning Hub (aka Resource Wall) is a simple, single-page web application, just like Pinterest for learners. It allows learners to save learning resources like tutorials, blogs and videos in a central place that is publicly available to any user.
 
 ## Final Product 
 
-!["Screenshot of My Resources Page"](https://github.com/xwang1000/learning-hub/blob/frontend/docs/ResourceWall-MyResources.png?raw=true)
-!["Screenshot of Search results"](https://github.com/xwang1000/learning-hub/blob/frontend/docs/ResourceWall-search.png?raw=true)
-!["Screenshot of My Posts"](https://github.com/xwang1000/learning-hub/blob/frontend/docs/ResourceWall-myposts.png?raw=true)
-!["Screenshot of others' posts"](https://github.com/xwang1000/learning-hub/blob/frontend/docs/ResourceWall-othersposts.png?raw=true)
+- the main browsing area
+!["Screenshot of Main Browsing Area"](https://github.com/xwang1000/learning-hub/blob/frontend/docs/ResourceWall-othersposts.png?raw=true)
+
+- creating a post
+!["Screenshot of Creating a post"](https://github.com/xwang1000/learning-hub/blob/frontend/docs/ResourceWall-MyResources.png?raw=true)
+
+- keyword search
+!["Screenshot of keyword search feature"](https://github.com/xwang1000/learning-hub/blob/frontend/docs/ResourceWall-search.png?raw=true)
+
+- my resources
+!["Screenshot of My Resources"](https://github.com/xwang1000/learning-hub/blob/frontend/docs/ResourceWall-myposts.png?raw=true)
+
+- comments section
 !["Screenshot of comments section"](https://github.com/xwang1000/learning-hub/blob/frontend/docs/Resourcewall-comments.png?raw=true)
 
+## Getting Started
+
+1. Create the `.env` by using `.env.example` as a reference: `cp .env.example .env`
+2. Update the .env file with your correct local information
+3. Install dependencies: `npm i`
+4. Fix to binaries for sass: `npm rebuild node-sass`
+5. Run migrations: `npm run knex migrate:latest`
+  - Check the migrations folder to see what gets created in the DB
+6. Run the seed: `npm run knex seed:run`
+  - Check the seeds file to see what gets seeded in the DB
+7. Run the server: `npm run local`
+8. Visit `http://localhost:8080/`
 
 ## Dependencies 
 - Node 5.10.x or above
@@ -49,21 +46,3 @@ Suggestion: When cloning, specify a different folder name that is relevant to yo
 - morgan 1.7.0 or above
 - node-sass-middleware 0.9.8 or above
 - pg 6.4.2 or above
-
-## Getting Started
-
-1. Create the `.env` by using `.env.example` as a reference: `cp .env.example .env`
-2. Update the .env file with your correct local information
-3. Install dependencies: `npm i`
-4. Fix to binaries for sass: `npm rebuild node-sass`
-5. Run migrations: `npm run knex migrate:latest`
-  - Check the migrations folder to see what gets created in the DB
-6. Run the seed: `npm run knex seed:run`
-  - Check the seeds file to see what gets seeded in the DB
-7. Run the server: `npm run local`
-8. Visit `http://localhost:8080/`
-
-## Dependencies
-
-- Node 5.10.x or above
-- NPM 3.8.x or above
