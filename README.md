@@ -4,20 +4,17 @@ Learning Hub (aka Resource Wall) is a simple, single-page web application, just 
 
 ## Final Product 
 
-- the main browsing area
-!["Screenshot of Main Browsing Area"](https://github.com/xwang1000/learning-hub/blob/frontend/docs/ResourceWall-othersposts.png?raw=true)
-
 - creating a post
-!["Screenshot of Creating a post"](https://github.com/xwang1000/learning-hub/blob/frontend/docs/ResourceWall-MyResources.png?raw=true)
+!["Screenshot of Creating a post"](./docs/posting.png)
 
 - keyword search
-!["Screenshot of keyword search feature"](https://github.com/xwang1000/learning-hub/blob/frontend/docs/ResourceWall-search.png?raw=true)
+!["Screenshot of keyword search feature"](./docs/keyword-search.png)
 
 - my resources
-!["Screenshot of My Resources"](https://github.com/xwang1000/learning-hub/blob/frontend/docs/ResourceWall-myposts.png?raw=true)
+!["Screenshot of My Resources"](./docs/my-resources.png)
 
 - comments section
-!["Screenshot of comments section"](https://github.com/xwang1000/learning-hub/blob/frontend/docs/Resourcewall-comments.png?raw=true)
+!["Screenshot of comments section"](./docs/comments.png)
 
 ## Getting Started
 
